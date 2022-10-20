@@ -1,0 +1,455 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{fit}
+\usepackage{pgfkeys}
+\usepackage{fancyvrb}
+\usepackage{xcolor}
+\usepackage{qtree}
+\usepackage{tikz-qtree}
+\usepackage{linguex}
+\usepackage{multicol}
+\usepackage{forest}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usetikzlibrary{arrows}
+\usepackage{amsmath}
+
+\tikzset{
+  arn_n/.style = {treenode, circle, black, draw=black,
+    text width=2.5em, very thick},% arbre rouge noir, noeud rouge
+  arn_r/.style = {red,
+    text width=2.5em, very thick},% arbre rouge noir, noeud rouge
+}
+
+\title{Algoritmi e Strutture Dati}
+\author{Alex Narder}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Contenuti del corso}
+In questo corso si parlerà di:
+\begin{description}
+
+	\item[•] Algoritmi e le loro complessità; capire il comportamento asintotico
+	\item[•] Ricorrenze 
+	\item[•] Grafi
+	\item[•] Alberi di copertura minimi
+	\item[•] Problema dei cammini minimi
+	\item[•] Algoritmi greedy
+
+\end{description}
+
+\newpage
+
+\section{Introduzione}
+
+Un \textbf{algoritmo} per essere utile deve essere funzionale e veloce. Quindi deve essere \textbf{ottimizzato},
+nel momento in cui il tempo di esecuzione è esponenziale allora l'algoritmo non è ottimizzato.
+\\
+\\
+Ci sono alcuni problemi per cui non c'è la speranza di trovare algoritmi efficenti.
+L'obiettivo di questo corso è studiare algoritmi non troppo complicati, che quindi non saranno esponenziali.
+Quando vado a misurare la complessità di un algoritmo la misuro rispetto alla dimensione dell'input
+dato.
+\\
+In alcune situazioni è molto utile capire di che tipo di input si parla, per analizzare il problema e trarre delle conclusioni.
+\\
+\\
+Parlando di complessità si usa sempre il \textbf{worst case}, ovvero il caso peggiore, mentre tutti gli altri casi saranno
+\textbf{best case} e \textbf{avarage case}.
+
+\section{Numeri di Fibonacci}
+
+Problema: 
+\\
+Scrivere un algoritmo che restituisca in uscita i numeri di Fibonacci.
+\\
+\\
+La sequenza di Fibonacci è un insieme di numeri, la sequenza è definita ricorsivamente;
+\\
+
+\begin{center}
+   \(F_n = \)
+$\left \{
+\begin{array}{l}
+   1,\; se \; n = 1, 2\\ 
+   F_{n-1} + F_{n-2}\; se \;n >= 3\\
+\end{array}
+\right.$
+\end{center}
+\(F_n\) rappresenta l'iesimo numero di Fibonacci.
+\section{Versioni Algoritmo di Fibonacci}
+\subsection{Versione 1 Algoritmo di Fibonacci}
+
+La sequenza di Fibonacci è direttamente collegata alla sezione aurea.
+\\Formula di \textbf{Binet};
+\\
+\\\(x^2 = x + 1\)
+\\\(x^2 - x - 1 = 0\)
+\\\(ax^2 + bx + c = 0\) $\rightarrow$ ci\; sono\; 2\; soluzioni\; \(x_{1,2}\):\\
+x1 = 1,618... che chiamiamo $\phi$
+\\x2 = 0,618... che\; chiamiamo\; $\hat{\phi}$\(\)\\
+\\La formula di Binet dice che per ogni n maggiore o uguale a 1 risulta
+\\
+\\
+\(F_n = \frac{1}{\sqrt{5}} * (\phi^n - \hat{\phi}\)\(\;^n)\)
+\\
+\\
+Dimostrare la formula di Binet: (induzione su n)\\\\
+\textbf{Base} $\rightarrow$ n = 1,2
+\\
+\\\textbf{n = 1} $\rightarrow$ \(F_1 = \frac{1}{\sqrt{5}} * (\phi - \hat{\phi}\)\(\;)\)
+\\
+\\\(\frac{1}{\sqrt{5}} * (\frac{1+\sqrt{5}}{2} - \frac{1-\sqrt{5}}{2)}\) = \textbf{1}
+\\
+\\
+\\
+n = 2 $\rightarrow$ \(F_2 = 1/\sqrt{5} * (\phi^2 - \hat{\phi}\)\(^2)\)
+\\
+\\\(\frac{1}{\sqrt{5}} * (\frac{1+\sqrt{5}}{2} - \frac{1-\sqrt{5}}{2})\) = \textbf{1}
+\\
+\\
+\\\textbf{Ipotesi induttiva:}
+\\
+\\
+\textbf{def.} $\rightarrow$ \(F_n = F_{n-1} + F_{n-2}  
+\\
+\\F_{n-1} = \frac{1}{\sqrt{5}} * (\phi^{n-1} - \hat{\phi}\)\(\;^{n-1})\) \;\; + 
+\\
+\\
+\(
+F_{n-2} = \frac{1}{\sqrt{5}} * (\phi^{n-2} - \hat{\phi}\)\(\;^{n-2}) \;\; =\)
+\\
+\\
+\(
+\frac{1}{\sqrt{5}} * [(\phi^{n-1} + \phi^{n-2}) - (\hat{\phi}\)\(\;^{n-1} + \hat{\phi}\)\(\;^{n-2})]
+\)
+\begin{center}
+   $\left \{
+\begin{array}{l}
+\phi^n = \phi^{n-1} + \phi^{n-2}\\
+   \hat{\phi}\;^n = \hat{\phi}\;^{n-1} + \hat{\phi}\;^{n-2}\\
+\end{array}
+\right.$
+\end{center}
+è vera per la definizione di $\phi$ e $\hat{\phi}$
+\newpage
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{red}{int} \textcolor{blue}{Fib1}(\textcolor{red}{int} n)\{
+   \textcolor{green}{return} 1/sqrt(5) * (phi^n - phiˆ^n);
+\}
+\end{Verbatim}
+facendo i calcoli l'argoritmo sembra corretto, ma al numero n = 18 il risultato è errato.
+
+\subsection{Versione 2 Algoritmo di Fibonacci}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{red}{int} \textcolor{blue}{Fib2}(\textcolor{red}{int} n)\{
+   \textcolor{olive}{if} (n<=2) \{
+      \textcolor{green}{return} 1;
+   \} \textcolor{olive}{else} \textcolor{green}{return} \textcolor{blue}{Fib2}(n-1) + \textcolor{blue}{Fib2}(n-2);
+\}
+\end{Verbatim}
+\;\;n\;\;\;\;\;\;\;\;T(n)\\
+\begin{tabular}{ |c|c| } 
+ \hline
+ 1 & 1 \\ 
+ 2 & 1\\ 
+ 3 & 2+1+1 = 4\\ 
+ 4 & 2+4+1 = 7\\
+ \hline
+\end{tabular}
+\\
+\\
+\\n è il numero, T(n) invece è il numero della istruzioni necessarie prima di ricevere un output.
+\begin{center}
+      T(n) =
+   $\left \{
+\begin{array}{l}	1 \; se \; n = 1,2\\
+	2 + T(n-1) + T(n-2) \; se \;  n >= 3\\
+\end{array}
+\right.$
+\end{center}
+\(T(n) = 2+T(n-1)+T(n-2)\) $\rightarrow$ quando \(n >= 3\)
+\newpage
+\textbf{Albero delle ricorsioni di n = 5:}
+\\
+\\
+\begin{center}
+\begin{tikzpicture}[level distance=1.5cm,
+  level 1/.style={sibling distance=3cm},
+  level 2/.style={sibling distance=1.5cm}]
+ \node [arn_r]{n = 5}
+	 child {node [arn_r]{n = 4}
+		child {node [arn_r]{n = 3}
+			child {node {n = 2}}
+			child {node {n = 1}}}
+		child {node {n = 2}}}
+	 child {node [arn_r]{n = 3}
+		child {node {n = 2}}
+		child {node {n = 1}}};
+\end{tikzpicture}
+\end{center}
+La complessità dei pallini in \textbf{rosso} è 2 mentre quella degli altri è 1.
+\\
+Sommando tutte le complessità otteniamo il numero di istruzioni necessarie per eseguire, in questo caso 13.
+\\
+\\
+In \textbf{rosso} ci sono i \textbf{nodi interni}
+\\
+Mentre in \textbf{nero} ci sono i \textbf{nodi foglia}
+\\
+\\
+\\$T(5) = 4*2 + 5*1$ $\rightarrow$ è\; dato\; da \;un\; numero\; di\; nodi\; interi \;(i)\; moltiplicati\; per\; 2\;
++\; il\; numero\; di\; foglie\; (f)
+\\
+\\
+$\rightarrow$ \(T(n) = 2 * i(Tn) + 1 * f(Tn) \)
+\\
+\\
+\newpage
+\subsubsection{Proposizione 1}
+Dato un generico albero di ricorsione, siamo in grado di arrivare a una formula che ci dica esattamente quanti nodi interni e foglia ci sono?
+\\
+\\
+$\rightarrow$ Sia T(n) l'albero di ricorsione relativo alla chiamata di Fib2(n),
+\\allora: f(Tn) = F(n) $\rightarrow$ infatti il numero delle foglie è l'esimo numero di Fibonacci.
+\\
+
+\includegraphics[width=0.8\linewidth]{png/1}
+\subsubsection{Proposizione 2}
+Sia T un albero dove i nodi interni hanno esattamente 2 figli, allora:
+\\Il numero di nodi interni è sempre uguale a f(T) - 1:
+\begin{center}i(T) = f(t) - 1\end{center}
+Da dimostrare.
+\\
+Quindi con la proposizione uno e la proposizione 2 otteniamo:\\
+T(n) = 2(F(n) - 1) + F(n) = 3F(n) - 2
+\subsubsection{Proposizione 3}
+Per ogni $n >= 6$ abbiamo che $F(n) >= 2^{n/2}$
+\\
+\\Da dimostrare
+\\
+\\
+Base: n = 6,7\\
+I.P.: n $>=$ 8\\
+\\
+\[F_n = F_{n-1} + F_{n-2}\]
+\[\;\;\;\;\;\;\;\;\;\;\;\;  >= 2^{(n-1) / 2} + 2^{(n-2)/2}\]
+\[.\]
+\[.\]
+\[.\]
+\[\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;  >= 2^{n/2}(\frac{1}{\sqrt{2}}+\frac{1}{2}) >= 2^{n/2}\]
+\subsection{Versione 3 Algoritmo di Fibonacci}
+
+\begin{Verbatim}
+int Fib3(int n){
+
+}
+\end{Verbatim}
+Complessità? T(n) è più o meno uguale a n
+
+\subsection{Versione 4 Algoritmo di Fibonacci}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{red}{int} \textcolor{blue}{Fib4}(\textcolor{red}{int} n)\{
+   \textcolor{red}{int} a = 1, b = 2;
+   \textcolor{olive}{for} (\textcolor{red}{int} i = 3 ; i <= n ; i++)\{
+      c = a+b;
+      a = b;
+      b = c;
+   \}
+   \textcolor{green}{return} b;
+\} 
+\end{Verbatim}
+
+\subsection{In sostanza}
+
+tabella:\\
+\\
+\begin{tabularx}{0.85\textwidth} { 
+  | >{\raggedright\arraybackslash}X 
+  | >{\centering\arraybackslash}X 
+ | >{\centering\arraybackslash}X 
+  | >{\centering\arraybackslash}X | }
+ \hline
+   & \textbf{corretto?} & \textbf{complessità temporale} & \textbf{complessità spaziale}  \\
+ \hline
+ Fib1 & no & costante & costante  \\
+ \hline
+ Fib2  & si  & esponenziale & lineare  \\
+ \hline
+ Fib3  & si  & lineare  & lineare  \\
+ \hline
+ Fib4  & si  & lineare & lneare  \\
+\hline
+\end{tabularx}
+\\
+\\
+L'algoritmo Fib4 è il più efficente.
+
+\section{Classi asintotiche}
+
+\subsection{Prima classe}
+$O(g(n)) = \{f(n)\;|\; \exists \; c > 0$\\
+$\exists \;un\; n_0 \in N \;|\; \forall n >= n_0 :$\\
+$f(n) <= c * g(n)\}$
+\\
+\\
+\includegraphics[width=0.8\linewidth]{png/2}
+
+\subsection{Seconda classe}
+$\Omega(g(n)) = \{f(n)\; | \; \exists \; c > 0$\\
+$\exists \; un \; n_0 \in N \; | \; \forall n >= n_0 :$\\
+$f(n) <= c * g(n)\}$\\
+\\
+\includegraphics[width=0.8\linewidth]{png/3}
+\\
+\textcolor{red}{$\frac{1}{2}n^2 - 3n = \Omega(n^2)$}
+\\
+\\
+\[\begin{split}
+   \exists  c > 0 \;\;\;\;& \exists n_0 \in N \;|\; \forall n >= n_0 :\\
+      & c * n^2 <= \frac{1}{2}n^2 - 3n\\
+      & c * n <= \frac{1}{2}n - 3\\
+      & n(\frac{1}{2} - c) >= 3
+\end{split}\]
+\\
+Supponendo che $\frac{1}{2} - c > 0 \;\; [c < \frac{1}{2}]$\\
+si ha:
+\\
+\[n >=  \frac{3}{\frac{1}{2}-c} = \frac{6}{1-2c}\]
+\\
+\\
+$\rightarrow$ scegliamo $c = \frac{1}{14}$\\\\
+si ottiene: $n >= \frac{6}{1-\frac{1}{7}} = 7$
+
+\subsection{Terza classe}
+
+\[\begin{split}
+   \Theta (g(n)) = \{f(n)\;|&\; \exists c_1 > 0,\; \exists c_2 > 0 \\
+   & \exists n_0 \in N \; | \; \forall n >= n_0 :\\
+   & c_1\;g(n) <= f(n) <= c_2 \; g(n)\}
+\end{split}\]
+\\
+notazione: $f(n) = \Theta(g(n))$
+\\
+\\
+\includegraphics[width=0.8\linewidth]{png/4}
+\\
+\\
+\underline{proprietà:}
+\[\begin{split}
+   f(n) = \Theta(g(n)) \leftarrow\rightarrow &f(n) = O(g(n)) \\
+   & f(n) = \Omega(g(n))
+\end{split}\]
+\\
+quindi: $\frac{1}{2}n^2 - 3n = \theta(n^2)$
+\\
+\\
+\textcolor{red}{$\sqrt{n+10} = \theta(\sqrt{n})$}\\
+\\
+\[\begin{split}
+   \exists c_1,c_2 > 0 \;\;\;\; &\exists n_0 \in N \;|\; \forall >= n_0 \;:\\  
+   & c_1\sqrt{n} <= \sqrt{n+10} <= c_2\sqrt{n} \leftarrow\rightarrow \\
+   & c_1^2n <= n+10 <= c_2^2n
+\end{split}\]
+\\
+\begin{itemize}
+   \item[1)] $c_1^2 n <= n+10 \leftarrow\rightarrow$
+      \\\\
+      $(c_1^2 - 1) n <= 10$
+      \\\\
+      se $c_1^2 - 1 <= 0 \;\;\;(c_1^2 <= 1, c_1 <= 1)$
+      \\\\
+      diventa vera $\forall n >= 1 \;\;\;\;\;\rightarrow c_1 = 1$ 
+   \item[2)] $n + 10 <= c_2^2n \leftarrow\rightarrow$
+      \\
+      \\
+      $n(c_2^2 - 1) >= 10$
+      \\
+      \\
+      se $c_2 > 1 :$
+      \\
+      \\
+      $n >= \frac{10}{c_2^2 - 1}$
+      \\
+      \\
+      poniamo $c_2 = \sqrt{2} (> 1)$
+      \\
+      si ha $n >= 10$
+      \\
+      quindi: \\
+      \textcolor{red}{$c_1 = 1$}
+      \\
+      \textcolor{red}{$c_2 = \sqrt{2}$}
+      \\
+      \textcolor{red}{$n_0 = 10$}
+\end{itemize}
+\subsubsection{esempi:}
+
+\begin{itemize}
+   \item[1)]log $ n = O(n)$
+\\
+\includegraphics[width=0.8\linewidth]{png/5}
+\item[2)]
+$n \log n = O(n^2)$
+\\
+$\forall n >= 1 : \log n <= n \leftarrow\rightarrow $
+\\$n \log n <= n^2$\\
+\\
+\textcolor{red}{c = 1 , $n_0 = 1$}
+\item[3)]
+   n!  = $O(n^n)$
+      \\
+      \\
+      infatti: 
+      \[n! = 1*2*3*...n\]
+      \[<= n*n*n*...n\]
+      \[= n^n\]
+
+\end{itemize}
+\subsection{Quarta classe}
+
+$o(g(n)) = \{f(n)\;|\; \forall c > 0 , \exists n \in N$ tale che $\forall n >= n_0 : f(n) < c * g(n)\}$
+\\
+\\osservazione:
+\\$o(g(n)) \subset O(g(n))$
+\\
+quindi: \\
+$f(n) = o(g(n)) \rightarrow f(n) = O(g(n))$
+\\
+\\
+\underline{proprietà:}
+\\
+\\
+$f(n) = o(g(n)) \leftarrow\rightarrow \lim_{n\to\infty} \frac{f(n)}{g(n)} = 0$
+\\
+\\
+\includegraphics[width=\linewidth]{png/6}
+
+\subsection{Quinta classe}
+
+$w(g(n)) = \{f(n)\;|\;\forall c > 0, \exists n_0 \in N $ tale che $\forall n >= n_0 : c * g(n) < f(n)\}$
+\\
+\\
+osservazione:\\
+$w(g(n)) \subset \Omega(g(n))$
+\\
+$f(n) = w(g(n)) \rightarrow f(n) = \Omega(g(n))$
+\\
+\\
+\underline{proprietà:}
+\\
+\\
+$f(n) = w(g(n)) \leftarrow\rightarrow \lim_{n\to\infty} \frac{f(n)}{g(n)} = +\infty$
+
+
+\end{document}
