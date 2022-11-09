@@ -1,0 +1,662 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+
+\title{Sistemi Operativi}
+\author{Alexej Nardovičk}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Contenuti del corso}
+
+\begin{description}
+   \item[•] \textbf{Funzione} e \textbf{struttura} di un Sistema Operativo
+   \item[•] \textbf{Sistemi a processi}: proprioetà di processi e thread
+   \item[•] Gestione dell'\textbf{unità centrale} - Alg.s di scheduling
+   \item[•] Gestione della \textbf{memoria centrale}
+   \item[•] Gestione del \textbf{file system}
+   \item[•] Gestione della \textbf{memoria secondaria} e i dispositivi di I/O
+   \item[•] \textbf{Casi di studio} - Unix/Linux. Linee generali di Windows e MacOS.
+\end{description}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Introduzione}
+
+\subsection{\textbf{Cos'è un Sistema Operativo}?}
+\begin{itemize}
+\item[-] macchina estesa
+\item[-] gestore di risorse
+\end{itemize}
+
+\section{Storia dei Sistemi Operativi}
+\subsection{I generazione -- 1945 - 1955}
+La prima generazione degli elaboratori elettronici è caratterizzata dall'utilizzo della tecnologia delle valvole e delle tavole di commutazione (\textit{plug boards}), insieme ad una programmazione avvenuta direttamente in linguaggio macchina.\\
+Alcuni antecedenti di queste macchine furono la \textit{Macchina analitica} del matematico Charles Babbage (1837 ca.) e il lavoro di Lady Ada Lovelace, considerata la prima programmatrice della storia.\\
+La programmazione in questa epoca avveniva senza alcun sistema operativo di riferimento, bensì direttamente in linguaggio macchina o cablando manualmente i circuiti del calcolatore.\\
+Gli anni '40 videro la nascita di alcuni dei primi calcolatori \textit{general purpose}, (\textit{i.e.} macchine senza un unico programma di esecuzione ma programmabili per eseguire calcoli generici), tra i quali il \textit{MARK I} della Harvard University costruito da IBM, l'\textit{ENIAC} (\textit{Electronic Numerical Integrator and Calculator}) e successivamente l'\textit{EDVAC}, (\textit{Electronic Discrete Variable Automatic Computer}), la prima macchina basata sulla tecnologia dei transistor che segue l'architettura di von Neumann.\\
+Queste macchine erano molto ingombranti fisicamente, e offrivano una potenza di calcolo minima rispetto a quello che ci offrono oggigiorno i Personal Computer: erano noti infatti i problemi relativi all'affidabilità, alla complessità d'uso e alla lentezza, dovuti tra le altre cose ad una mancata distinzione tra i ruoli di costruzione, progettazione, programmazione e manutenzione delle macchine. \\
+La memorizzazione di dati e programmi avveniva prima attraverso schede perforate, successivamente tramite transistor.
+
+\subsection{II generazione -- 1955 - 1965}
+A partire da metà anni '50 prese piede lo sviluppo di linguaggi di programmazione ad alto livello, tra i quali ricordiamo sicuramente il linguaggio assembly e Fortran. La memorizzazione di dati e programmi avveniva ancora tramite schede perforate e transistor, e i calcolatori erano caratterizzati dalla cosiddetta \textbf{monoprogrammazione}: i programmi utente memorizzati su schede perforate e in attesa di esecuzione venivano caricati ed eseguiti nelle macchine \textbf{uno alla volta}. Questi programmi o insiemi di programmi prendono il nome di \textbf{job}, e la loro esecuzione avveniva in differita attraverso un operatore che eseguiva dei \textbf{comandi \textit{batch}}. \\
+Questa generazione vede anche la distinzione tra i seguenti ruoli:
+\begin{itemize}
+\item Costruttori
+\item Programmatori (programmavano in \textit{high level language})
+\item Operatori (gli effettivi utilizzatori dei calcolatori; gestivano le schede di programma, le schede JCL (Job Control Language) e l'I/O)
+\end{itemize}
+In questi anni cominciano a nascere i primi sistemi operativi per semplificare l'uso dei calcolatori, che funzionavano appunto secondo il concetto di \textit{batch}:
+\begin{itemize}
+\item[1)] I programmi e i dati venivano caricati in sequenza su un nastro
+\item[2)] Questi nastri venivano spostati sul computer ed eseguiti a lotti (da qui \textit{batch})
+\item[3)] L'output veniva stampato su nastro
+\item[4)] Altri computer più piccoli si occupavano della lettura/scritta da/verso nastro
+\end{itemize}
+% \includegraphics[scale=0.4]{1}
+
+\begin{figure}[h]
+\caption{Struttura tipica di un job - Fortran}
+\centering
+\includegraphics[width=9cm]{1}
+\end{figure}
+
+\begin{figure}[h]
+\caption{Organizzazione della memoria durante l'esecuzione di un sistema \textit{batch}}
+\centering
+\includegraphics[width=10cm]{2}
+\end{figure}
+
+\subsection{III generazione -- 1965 - 1980}
+La terza generazione di calcolatori conserva dagli anni precedenti l'utilizzo di sistemi di elaborazione \textit{batch}, tuttavia con una grande novità: quella della \textbf{multiprogrammazione}: secondo questo principio, un job può usare il processore, mentre altri job usano le unità periferiche di cui hanno bisogno. Questo portò ad una partizione della memoria, assegnandone le varie parti a diversi job, in favore di un'esecuzione contemporanea di diversi job e una potenza di calcolo decisamente superiore. \\
+Per gestire questo \textit{pool} di job da eseguire, nacque la necessità di algoritmi di \textbf{scheduling} della CPU: algoritmi efficienti grazie ai quali il processore sa come, quando e quanto allocare risorse ai programmi che più ne hanno bisogno in un determinato momento. Vennero quindi progettati i primi \textit{\textbf{scheduler}}, software del sistema operativo adibiti a questo compito.\\
+In questi anni si progettarono nuovi linguaggi di programmazione ad alto livello (\textit{e.g.} C) e si diffuse l'uso di editor testuali e grafici. \\
+Un'altra novità tecnologia di questa generazione è lo sviluppo dei \textbf{circuiti integrati}, che permisero una riduzione dei costi ottenendo anche una maggior velocità, e la nascita di sistemi operativi più complessi. \\
+Tra le macchine degne di nota ricordiamo la famiglia di elaboratori \textit{System/360} di produzione IBM e finalizzata all'uso per \textit{mainframe} e i minicalcolatori PDP, caratterizzati dai costi contenuti e dalle prestazioni limitate. \\ \\
+Studiamo più nel dettaglio alcuni concetti della multiprogrammazione:\\
+\begin{itemize}
+    \item \textbf{SPOOL} (\textit{Simultaneous Peripheral Operation On Line}): tecnologia che permette l'esecuzione di operazioni concorrenti e l'esecuzione di job parallela alle operazioni I/O e al trasferimento dati.
+    \item \textbf{Sistemi timesharing}: variante della multiprogrammazione, sviluppata per supportare molti utenti interattivi simultanei ai terminali. Questa tecnologia prevedeva di dividere il tempo della CPU in \textbf{quanti di tempo}, di lunghezza arbitraria, al termine dei quali il job viene interrotto e si assegna la CPU al job successivo (\textit{prelazione}). \\
+    Questo concetto comportava dunque:
+    \begin{itemize}
+    \item[-] Cambi di contesto frequenti (\textbf{context switch}, che avvengono tuttora nelle architetture moderne)
+    \item[-] Attenzione alla protezione e sicurezza dei dati e della memoria (un job non può poter accedere ai dati di un altro job)
+    \item[-] Principio di sviluppo della tecnologia della \textbf{memoria virtuale}
+    \item[-] Tempo di risposta ridotto a minuti/secondi
+    \end{itemize}
+    Per quanto questo concetto possa sembrare estremamente efficiente, bisogna selezionare la dimensione del quanto di tempo con una certa cognizione di causa: un quanto troppo breve causerebbe un overhead troppo grande dovuto alla maggior frequenza di cambi di contesto, mentre un quanto troppo lungo rallenterebbe job di minore entità in favore di job più complessi. \\
+\end{itemize}
+Alcuni esempi di tecnologie di timesharing introdotte in questo periodo furono il sistema \textbf{CTSS} (\textit{Compatible Time Sharing System}) da parte dell'MIT, evoluto poi nel \textbf{MULTICS} (\textit{Multiplexed Information and Computer Service}), in cui venne introdotto il concetto di \textbf{processo}. Questi sistemi, insieme al \textbf{TSS} (\textit{Time Sharing System}, su cui si basa \textit{Unix}, di cui parleremo in seguito) e al \textbf{CP/CMS} (\textit{Control Program/Cambridge Monitor System}) includono il concetto di \textbf{memoria virtuale}, per dare ai processi l'illusione di avere maggior memoria di quella fisicamente disponibile. \\
+Nacquero anche i sistemi \textbf{real-time}, atti a fornire una risposta entro un dato periodo di tempo limitato. \\\\
+Abbiamo già menzionato \textit{Unix}, sistema operativo derivato da CTSS e MULTICS che implementa le tecnologie di timesharing multiprogrammati che abbiamo visto finora. Nel 1974 \textit{Unix} fece registrare una doppia licenza, commerciale e libera, e venne pubblicato il suo codice sorgente: per rendere compatibili le diverse versioni che si vennero a creare di questo sistema operativo, fu introdotto lo standard \textit{POSIX}, appartenente allo standard \textit{IEEE}, dal momento che disponendo del codice sorgente ognuno aveva la possibilità di creare una nuova versione del sistema operativo. Questa possibilità fu anche favorita dallo sviluppo dei primi semplici Personal Computer, costituiti da una tecnologia a microprocessori. \\\\
+Infine, in questa generazione si iniziò a sviluppare anche la tecnologia Internet e i protocolli TCP/IP da parte del Dipartimento della Difesa americano, usati in ambienti militari e accademici per una massiccia e veloce trasmissione dei crescenti volumi di dati.
+
+\subsection{IV generazione -- 1980 - presente}
+A partire dagli anni '80 crebbe fortemente lo sviluppo delle \textbf{workstation} e dei \textbf{personal computer}, il cui utilizzo venne fortemente semplificato grazie all'introduzione delle \textbf{interfacce grafiche (GUI)}. Il trasferimento di informazioni tra computer tramite \textbf{reti} divenne molto più pratico ed economico, e l'elaborazione dei dati diventò man mano sempre più \textbf{distribuita} ai siti in cui veniva richiesta. \\
+Alcuni esempi di sistemi operativi introdotti in questa generazione furono:
+\begin{itemize}
+    \item \textit{CP-M80 Digital}, divenuto poi \textit{MS-DOS}
+    \item \textit{LisaOS} (1983), primo SO per PC con GUI, seguito da \textit{MacOS} (1984) e \textit{MacOSX} (1999)
+    \item \textit{Windows} (1985), \textit{Windows 3} (1990) che adottò la tecnologia della \textbf{memoria virtuale}, \textit{Windows 95} (1995), \textit{Windows NT} (1998), \textit{Windows XP} e \textit{Windows Millennium Edition} (2001), \textit{Windows 7} (2017), \textit{Windows 8} (2012) per sistemi touch, \textit{Windows 10} (2015). \\
+Tutti i sistemi operativi di \textit{Microsoft} accennati sopra sono stati inizialmente pensati per girare su PC, ma vennero poi anche adattati per le \textit{workstation}.
+    \item \textit{Linux}, \textit{Unix} - dotati di interfaccia \textit{Xwindows} (basato su \textit{X11} del MIT), poi \textit{BSD}, \textit{Xenix}, \textit{SunOS}, \textit{Solaris}, \textit{FreeBSD} (da cui derivò anche \textit{MaxOSX})
+\end{itemize}
+Nacque in questa generazione la distinzione tra \textbf{cliente} e \textbf{servente}, concetti chiave su cui si svilupperà poi il relativo modello di elaborazione:
+\begin{itemize}
+    \item I \textbf{clienti} richiedono diversi servizi ai serventi
+    \item I \textbf{server} eseguono le richieste di servizio
+\end{itemize}
+Subì una forte evoluzione anche l'area dell'ingegneria del software, promossa anche dal governo degli Stati Uniti per un controllo rigoroso dei progetti software del Dipartimento della Difesa, realizzando alcuni traguardi della storia dell'informatica quali i concetti di \textbf{riusabilità del codice}, un maggior grado di \textbf{astrazione nei linguaggi di programmazione} e il \textbf{multithread} di istruzioni da poter eseguire in modo indipendente. \\ \\
+Il decennio successivo vide la nascita delle applicazioni e delle \textbf{reti di calcolatori}, tra cui ricordiamo il \textit{World Wide Web} e \textit{Microsoft Office}. In questo periodo sistemi operativi e calcolatori erano già molto simili a quelli che usiamo al giorno d'oggi, infatti è a partire dagli anni '90 che si fondarono le basi dei dispositivi che usiamo tuttora: PC, smartphone e tablet (con relativi sistemi operativi), sistemi distribuiti, cloud computing... \\
+Tutte queste innovazioni furono favorite dall'importante \textbf{decrescita del costo} della capacità di elaborazione e della memoria, che rese possibile l'esecuzione di programmi grandi e complessi su PC e ampliò la disponibilità di sistemi economici per la memorizzazione di grandi database e l'elaborazione di job, riducendo quindi la necessità di mainframe centralizzati: diretta conseguenza di ciò fu lo sviluppo di metodi e tecniche per l'elaborazione di calcolo distribuito, tramite appunto i cosiddetti \textbf{sistemi distribuiti}, cioè sistemi di elaborazione indipendenti che cooperano per raggiungere un obbiettivo comune.
+\begin{itemize}
+    \item \textbf{Sistemi paralleli}
+        \begin{itemize}
+                \item Un sistema con un ampio insieme di unità di elaborazione
+                \item Accoppiamento stretto, comunicazione rapida
+                \item Risorse condivise (\textit{e.g.}, la memoria)
+                \item Alta affidabilità e prestazioni
+        \end{itemize}
+    \item \textbf{Sistemi distribuiti}
+        \begin{itemize}
+                \item Sistema costituito da un insieme di unità di elaborazione complete interagenti e cooperanti, collegate da linee di comunicazione
+                \item Omogeneo o eterogenei
+                \item Architetture
+                \item Condivisione di risorse, prestazioni, affidabilità e trasparenza
+        \end{itemize}
+\end{itemize}
+Sempre in questo decennio vennero creati degli \textbf{standard} di sistemi operativi che supportano \textbf{networking tasks}, per l'aumento della \textbf{produttività e comunicazione}, ed è in questo periodo che la \textbf{Microsoft Corporation} divenne dominante, grazie all'introduzione nei sistemi operativi \textit{Windows} di tecnologie presenti nei primi Macintosh che permettevano agli utenti di navigare più applicazioni concorrenti con una certa facilità. \\ \\
+Importante fu anche lo sviluppo della \textbf{tecnologia a oggetti}:
+\begin{itemize}
+    \item Molte applicazioni si scrivevano in \textbf{linguaggi di programmazione orientati agli oggetti} (\textit{e.g.}, C++ o Java)
+    \item \textbf{Sistemi operativi orientati agli oggetti}, oggetti appunto che rappresentano componenti del SO
+    \item Concetti come \textbf{eredità} e interfacce sfruttati per creare sistemi operativi \textbf{modulari} e che permettevano di mantenere ed estendere il software rispetto alle tecniche precedenti
+\end{itemize}
+Va adesso fatta una digressione storica sulla questione della filosofia \textit{open-source}: negli anni '90 la maggior parte dei software commerciali era venduta sotto forma di \textbf{codice oggetto} già compilato, non includeva il codice sorgente vero e proprio; questo serviva ai produttori di sistemi operativi per nascondere le tecniche di programmazione e informazione proprietaria. \\
+In questo decennio si diffuse sempre di più l'ideologia del software libero, \textit{\textbf{open-source}} appunto, distribuito insieme al codice sorgente, che ne permette l'esame e la modifica. Alcuni software estremamente famosi utilizzati tutt'ora, come \textbf{Linux} e \textbf{Apache Web Server}, sono \textit{open-source}. \\
+Una pietra miliare della storia dell'\textit{open-source} fu la nascita del progetto \textit{\textbf{GNU}}, a cura di Richard Stallman, che consisteva in un progetto di \textbf{software libero} che si poneva l'obiettivo di ricreare ed estendere gli strumenti per il sistema operativo \textbf{Unix} di \textit{AT\&T}, schierandosi contro il concetto di costo per l'uso di software. \\
+Sulla scia di Richard Stallman nacquero altre iniziative a favore della promozione dell'\textit{open-source}, tra le quali ricordiamo la \textit{\textbf{Open Source Initiative}}, \textit{\textbf{OSI}}:
+\begin{itemize}
+    \item Organizzazione nata per promuovere i benefici della programmazione \textit{open-source}
+    \item Facilita il rapido miglioramento dei prodotti software, permettendo a chiunque di \textbf{testare},
+        eseguire il \textbf{debug} e \textbf{migliorare le prestazioni}
+    \item Aumenta la probabilità di riconoscere e risolvere i \textit{bugs} per risolvere anche problemi relativi alla sicurezza dei programmi
+    \item Gli individui e le aziende possono modificare il codice sorgente per creare software personalizzato secondo l'esigenza del relativo ambiente (\textbf{adattabilità})
+\end{itemize}
+Possiamo concludere questa rassegna sulla IV generazione dei sistemi operativi ribadendo alcuni concetti chiave:
+\begin{itemize}
+    \item I sistemi operativi diventano sempre più di facile uso (\textit{user friendly})
+    \item Le caratteristiche delle \textit{\textbf{GUI}} introdotte da \textit{Apple} e adottate poi da tutte le altre grandi aziende sono sempre più diffuse e migliorate
+    \item Le funzionalità "\textbf{Plug-and-play}" sono integrate nei sistemi operativi: permettono agli utenti di aggiugnere e rimuovere dinamicamente componenti hardware, senza il bisogno di riconfigurare manualmente il sistema operativo
+    \item I \textbf{servizi web} cominciano la loro ascesa verso l'utilizzo commerciale:
+        \begin{itemize}
+            \item Comprendono un insieme di \textbf{standard} correlati
+            \item Componenti software ready-to-use su Internet
+            \item Permette a due qualsiasi applicazioni di comunicare e scambiare dati
+            \item Fanno largo uso di \textbf{middleware}: un insieme di software che collegano applicazioni separate e diverse (spesso tramite rete e anche fra macchine eterogenee, dotate di diverse architetture)
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Cenni di storia di Internet e World Wide Web}
+Prima di affrontare l'ultima generazione della storia del sistemi operativi, è importante soffermarci su tempi e modalità che alla fine del II millennio portarono alla nascita del sistema di reti del \textit{World Wide Web}. \\ \\
+Come abbiamo già accennato, gran parte dello sviluppo di Internet fu promosso dai governi, specialmente quello degli Stati Uniti d'America: alla fine degli anni '60, il Dipartimento della Difesa americano creò e implementò \textbf{ARPAnet}, una sorta di predecessore di Internet, una rete progettata per trasmettere dati tra i principali sistemi delle istituzioni finanziate da ARPA \textbf{senza controllo centralizzato}. Questo antecedente di Internet era già allora capace di una trasmissione di informazioni quasi istantanea tramite e-mail. \\ \\
+Successivo fu poi lo sviluppo del \textbf{Transmission Control Protocol/Internet Protocol} (\textbf{TCP/IP}),, cioè di un insieme di regole per comunicare su \textit{ARPAnet}. Questi protocolli \textbf{gestiscono la comunicazione fra applicazioni}, assicurandosi che i messaggi siano \textbf{instradati} correttamente dal mittente al destinatario, limitando gli errori tramite \textbf{tecniche di correzione dell'errore}. Gli stessi protocolli vennero poi riutilizzati quando la rete venne aperta anche all'uso commerciale più generale. \\ \\
+Nel 1989, nel suo studio al CERN di Ginevra, Tim Berners-Lee progettò quella che diventerà poi la rete su cui, attualmente, verranno scambiate tutte le informazioni tramite Internet: il \textbf{World Wide Web}. \\
+Venne ideato come rete per \textbf{individuate e visualizzare documenti multimediali} su argomenti qualsiasi, ma soprattutto per la \textbf{condivisione di informazioni} attraverso documenti di testo con \textbf{collegamenti ipertestuali}. I documenti presenti in questa rete sono definiti secondo lo standard del linguaggio \textbf{HTML} (\textbf{HyperText Markup Language}), e il protocollo (cioè le regole di comunicazione) p definito dall'\textbf{HTTP} (\textbf{HyperText Transfer Protocol}).
+
+\subsection{V generazione -- 1990 - presente}
+La caratteristica principale degli elaboratori moderni è sicuramente la \textbf{mobilità}: dagli anni '90 infatti lo sviluppo della tecnologia per sistemi mobili crebbe a ritmi esponenziali, partendo dai primi palmari quali il \textit{Nokia N9000} per arrivare ai moderni \textit{smartphone} (termine coniato nel 1997) dotati di sistemi operativi complessi, quali \textit{Android}, basato su Linux e di proprietà di Google, e \textit{iOS}, di proprietà di Apple. \\
+Ciò che contraddistingue i dispositivi mobili moderni è una serie di fattori:
+\begin{itemize}
+    \item Risorse limitate
+    \item Alimentazione a batteria
+    \item Diversi dispositivi di I/O
+    \item Uso intensivo di applicazioni, reti e protocolli (\textit{cloud computing})
+    \item Integrazione in altri oggetti
+    \item Attenzione alla sicurezza
+\end{itemize}
+Tutti i moderni calcolatori possono interagire tra di loro attraverso l'\textit{\textbf{Internet of Things}} (\textit{\textbf{IoT}}), grazie all'evoluzione della rete sulla quale possono scambiare informazioni oggetti statici e mobili (\textit{e.g.}, elettrodomestici, abbigliamento, impianti, macchine, attrezzature...). \\
+Alla base di questa tecnologia si trova il concetto di \textit{ubiquitous computing}, in italiano \textit{computazione ubiqua}, cioè un modello di interazione uomo-macchina secondo il quale l'elaborazione delle informazioni è integrata all'interno di oggetti e attività di tutti i giorni (gli oggetti citati sopra). Per permettere queste implementazioni bisogna chiaramente progettare e sviluppare un sistema operativo anche per questi oggetti, e anche per essi, come per un tradizionale calcolatore, bisogna preoccuparsi di garantirne sicurezza e privacy.\\
+L'informazione può essere scambiata anche attraverso i cosiddetti \textit{smart objects} (cioè tecnologie \textit{RFID}, codici \textit{QR}...).
+\newpage
+
+\section{Cos'è un sistema operativo}
+
+\textbf{Un S.O. è un software che controlla l'hardware.\\}
+Un S.O. è un programma che gestisce e controlla l'esecuzione di un
+insieme di applicazioni, agisce come interfaccia tra le applicazioni e
+l'hardware del calcolatore e gestisce le risorse hardware.\\
+Il S.O. è (prevalentemente) eseguito con il processore in modalità kernel
+Le applicazioni sono eseguite principalmente in modalità utente. Un sistema operativo ha applicazioni separate dall'hardware utilizzato:
+\\
+- livello software\\
+- gestione software e hardware per produrre i risultati desiderati
+\\
+\\
+Un Sistema operativo innanzitutto è un gestore di risorse:\\
+• Risorse harware;
+\begin{itemize}
+   \item[-] processore
+   \item[-] periferiche I/O
+   \item[-] memoria
+   \item[-] periferiche di comunicazione
+   \item[-] ecc.
+\end{itemize}
+• Applicazioni software\\
+\\ componenti di un sistema operativo:\\
+\includegraphics[width=0.8\linewidth]{png/1}\\
+
+\section{Sistemi timesharing}
+
+\begin{itemize}
+   \item[•] Variante della multiprogrammazione, fu sviluppato per supportare più utenti interattivi nello stesso momento sul terminale
+   \item[•] Il tempo di CPU è suddiviso in \textbf{quanti di tempo}
+   \item[•] Al termine del quanto il job viene interrotto e si assegna la CPU al job
+successivo (prelazione)
+   \item[•] Il tempo di risposta viene ridotto a minuti o secondi 
+\end{itemize}
+Progettazione dei sistemi timesharing:
+\\
+- Gestione del processore: scheduling 
+\\
+- Gestione della memoria: memoria virtuale
+\\
+- Protezione delle risorse (memoria, filesystem, ...)
+
+\section{Componenti hardware}
+Per progettare un sistema operativo devo conoscere le risorse hardware e software che deve gestire:
+\\
+- processori\\
+- memoria interna / memoria secondaria \\
+- altre periferiche I/O \\
+- processi \\
+- thread \\
+- file \\
+- database 
+\subsection{componenti hardware - CPU}
+Il processore è quella parte dell'hardware che \textbf{esegue} in linguaggio macchina,
+la CPU esegue le \textbf{isrtuzioni} di un programma. 
+\\
+All'interno della CPU troviamo i \textbf{registri}, ovvero delle memorie ad alta velocità situati sui processori.
+I dati devono essere nei registri prima che un processore
+possa operarvi.
+\\Il  \textbf{tempo di elaborazione si misura in cicli}, fornito dal generatore di clock di sistema.
+\\
+La velocità del processore è misurata in \textbf{GHz} (miliardi di cicli per secondo).
+\\
+\\
+\includegraphics[width=0.9\linewidth]{png/2}\\
+\includegraphics[width=\linewidth]{png/3}
+\\
+\\
+La \textbf{CPU} si trova in diverse modalità, in mod \textbf{nucleo (kernel)} o \textbf{utente}. Quando viene chiamata una TRAP (istruzione) viene cambiata la modalità da utente a kernel.
+\\
+\\
+\includegraphics[width=0.9\linewidth]{png/4}\\
+\includegraphics[width=\linewidth]{png/5}
+
+\subsection{componenti hardware - Scheda madre}
+
+Scheda con circuiti elettronici stampati:
+\begin{itemize}
+   \item[•] Componente hardware hce fornisce collegamenti elettrici tra i dispositivi
+   \item[•] La scheda madre è il circuito stampato (\textbf{PCB}) centrale nel sistema:
+      \begin{itemize}
+         \item[-] I dispositivi come CPU e memoria principale sono attaccati
+         \item[-] include \textbf{chip} per eseguire operazioni di basso livello (\textbf{BIOS – Basic Input Output System}).
+         \item[-] BIOS controlla quanta RAM è disponibile, le componenti
+collegate, scansiona i bus e rileva i dispositivi, poi determina il
+dispositivo di avvio, carica e avvia il primo settore.
+      \end{itemize}
+\end{itemize}
+
+\subsection{componenti hardware - Memoria}
+
+\includegraphics[width=\linewidth]{png/6}
+\\
+Tipica \textbf{gerarchia di memoria}. Con memoria non volatile indichiamo tutta la memoria che non viene cancellata una volta tolta l'alimentazione. In generale nella memoria principale abbiamo 
+i dati del livello più basso a cui la CPU fa direttamente riferimento.
+\\
+\includegraphics[width=\linewidth]{png/7}
+
+\subsubsection{memoria volatile}
+\begin{itemize}
+   \item[•] \textbf{Registri}, sono intrni alla CPU, hanno una capacità limitata, ovvero: 
+      \begin{itemize}
+         \item[-] 32x32 bit per CPU a 32 bit
+         \item[-] 64x64 bit per CPU a 64 bit
+      \end{itemize}
+   \item[•] \textbf{Chache}, è composta da livelli, ogni livello è più lento del precedente. La chache è estremamente utile per ridurre i tempi, ma è difficile da progettare.
+   \item[•] \textbf{Memoria principale}, si divide in:
+      \begin{itemize}
+         \item[-] \textbf{RAM}, Random Access Memory, è una memoria volatile con accesso diretto ovunque. Si divide in \textbf{DRAM} (dinamica, richiede l'aggiornamento del circuito) e \textbf{SRAM} (statica, non richiede aggiornamento).
+                  La \textbf{Banda} è una caratteristica importante della RAM e consiste nella quantità di dati che possono essere trasferiti per unità di tempo.
+         \item[-] \textbf{ROM}, Read Only Memory, non volatile, veloce, economica, programmata dal costruttore.
+         \item[-] \textbf{EEPROM}, Memoria Flash, non volatile, riscrivibile, molto più lenta della RAM.
+         \item[-] \textbf{CMOS}, volatile, spesso per memorizzare data e ora.
+      \end{itemize}
+\end{itemize}
+\includegraphics[width=\linewidth]{png/8}
+
+\subsubsection{memoria non volatile}
+
+La \textbf{memoria secondaria}, conserva grandi quantità di dati \textbf{persistenti} a basso \textbf{costo}.
+\\
+L'accesso ai dati su un disco rigido è molto più \textbf{lento} rispetto alla memoria principale.
+\\ Il disco funziona grazie ad un movimento meccanico della testa di lettura/scrittura, quindi ci sono dei tempi di trasferimento e una latenza di rotazione.
+\\
+La memoria secondaria rimovibile facilita il backup e il trasferimento dei dati.
+\includegraphics[width=\linewidth]{png/9}
+\\
+\textbf{Dischi:}
+\\
+\\
+\includegraphics[width=0.9\linewidth]{png/10}\\
+\includegraphics[width=\linewidth]{png/11}
+
+\subsection{componenti hardware – I/O - interrupt}
+
+\includegraphics[width=0.8\linewidth]{png/12}\\
+
+\subsection{componenti hardware – Direct Memory Access (DMA)}
+
+La \textbf{DMA migliora il trasferimento dati} fra la memoria e le periferiche I/O.
+\\Le periferiche e i controllori \textbf{trasferiscono direttamente} i dati da e verso la
+memoria, il processore è libero di eseguire le istruzioni sw.
+Il canale DMA usa un controllore I/O per gestire il trasferimento dei dati, notifica al processore quando una operazione I/O è terminata.\\
+Migliora le prestazioni del sistema nel caso di un elevato numero di
+operazioni of I/O.
+
+\subsection{componenti hardware - bus}
+
+\begin{itemize}
+   \item[•] Un bus è un \textbf{insieme di tracce}:
+      \begin{itemize}
+         \item[-] le \textbf{tracce} sono sottili collegamenti elettrici che trasportano informazioni tra dispositivi hardware
+         \item[-] una \textbf{porta} è un bus che collega solo \textbf{2} dispositivi
+         \item[-] un \textbf{canale} di I/O è un bus \textbf{condiviso} da diversi dispositivi per eseguire operazioni I/O, che vengono gestite indipendentemente dalla CPU del sistema 
+         \item[-] velocità misurara in MHz
+         \item[-] \textbf{PCIe} (Pheripheal Component Interconnect Express) collega una CPU ai dispositivi; lo standard PCI Express raggiunge fino a 16 o 64 Gb per secondo, velocità che raddoppiano ogni 3-5 anni
+         \item[-] \textbf{AGP} (Accelerated Graphic Port) per schede grafiche
+      \end{itemize} 
+\end{itemize}
+\includegraphics[width=\linewidth]{png/13}
+\\
+\includegraphics[width=\linewidth]{png/14}
+\\
+\newpage
+\begin{itemize}
+   \item[•] \textbf{USB (universal serial bus)}:
+      \begin{itemize}
+         \item[-] nata per connettere dispositivi lenti
+         \item[-] oggi USB 3.0 a 5 Gbps
+         \item[-] non occorre riavviare il sistema per usare i dispositivi
+      \end{itemize}
+   \item[•] \textbf{SCSI (small computer system interface)}:
+      \begin{itemize}
+         \item[-] bus ad alte prestazioni 
+         \item[-] tipo hdd, scanner, lettori DVD
+         \item[-] obbiettivo: compatibilità dei dispositivi
+         \item[-] oggi usato prevalentemente per server e workstations
+         \item[-] velocità da 5 MBps a 640 MBps
+      \end{itemize}
+\end{itemize}
+
+\section{Sistemi operativi come base e interfaccia delle app.}
+
+\includegraphics[width=\linewidth]{png/15}
+
+\newpage
+
+\subsection{Tipi e scopi}
+
+\begin{itemize}
+   \item[•] Sistemi operativi per \textbf{alto livello di astrazione}: Occorre definire speciali requisiti di progetto e supporto hw
+      \begin{itemize}
+         \item[-] Grande memoria principale 
+         \item[-] Hardware per usi speciali 
+         \item[-] Grande numero di processi 
+      \end{itemize}
+   \item[•] Sistemi \textbf{integrati} (embedded):
+      \begin{itemize}
+         \item[-] Caratterizzato da un \textbf{insieme limitato di risorse} specializzare
+         \item[-] Forniscono funzionalità per vari tipi di dispositivi come telefoni cellulari e PDA (palmari)
+         \item[-] Gestione efficente delle risorse fondamentali per la costruzione di un buon sistema operativo
+      \end{itemize}
+   \item[•] Sistemi operativi \textbf{per mainframe}:
+      \begin{itemize}
+         \item[-] Grandi capacità di I/O 
+         \item[-] Servizi: batch, transizioni, time-sharing
+         \item[-] Es. IBM OS/390, Linux
+      \end{itemize}
+   \item[•] Sistemi perativi \textbf{per server}:
+      \begin{itemize}
+         \item[-] Molti utenti
+         \item[-] Servizi: archiviazione, web server, ISP
+         \item[-] Es. Solaris SUN, FreeBSD, Windows Server, Linux
+      \end{itemize}
+   \item[•] Sistemi operativi \textbf{per multiprocessore}:
+      \begin{itemize}
+         \item[-] Molte CPU
+         \item[-] Computer paralleli, multiprocessori
+         \item[-] Comunicazione, connessione e coerenza
+         \item[-] Es. Linux, Windows
+      \end{itemize}
+   \item[•] Sistemi operativi \textbf{per pc}:
+      \begin{itemize}
+         \item[-] Multiprogrammazione, un singolo utente
+         \item[-] Es. Linux, FreeBSD, Windows 7, Windows 8, Apple OSX
+      \end{itemize}
+   \item[•] Sistemi operativi \textbf{per palmari (PDA)}:
+      \begin{itemize}
+         \item[-] CPU multicore, fotocamera, sensori, GPS, molte applicazioni 
+         \item[-] Es. Android, iOS
+      \end{itemize}
+   \item[•] Sistemi operativi \textbf{per sensori}:
+      \begin{itemize}
+         \item[-] Es. TinyOS
+      \end{itemize}
+   \item[•] Sistemi operativi \textbf{per real-time}:
+      \begin{itemize}
+         \item[-] Obbiettivi con scadenza (deadline)
+         \item[-] Tipo Hard real-time stretto e improrogabile, che deve essere eseguito in tempo
+         \item[-] Tipo Soft real-time lasco e con scadenza flessibile 
+         \item[-] Es. controllo di automazione, sistemi audio multimediali 
+      \end{itemize}
+   \item[•] Sistemi operativi \textbf{per smart-card}:
+      \begin{itemize}
+         \item[-] Es. pagamento elettronico, trasporti, amministravivi
+         \item[-] Semplici S.O.
+      \end{itemize}
+\end{itemize}
+\subsubsection{Esempi di tipi}
+\begin{itemize}
+   \item[•] Batch
+   \item[•] Interattivi in time sharing (es. Unix)
+   \item[•] Per PC (es. Windowscagasbura, Mac OSX, Linuxmerda)
+   \item[•] Real-time (es. telefoni, sistemi di controllo)
+   \item[•] Multimedia (es. video in streaming)
+   \item[•] Transazionali (es. operazioni brevi, banche dati)
+   \item[•] Per dispositivi mobili (es. smartphone, PDA, tablet)
+   \item[•] Embedded (integrati, elettrodomestici, automazione)
+\end{itemize}
+
+\newpage 
+
+\section{Concetti di Base S.O.}
+
+Le \textbf{architetture di sistemi} includono caratteristiche che svolgono \textbf{funzioni} del sistema operativo rapidamente in hardware per migliorare le \textbf{prestazioni}.
+In più mantengono caratteristiche che consentono al sistema operativo di \textbf{rispettare} rigidamente la \textbf{protezione}.
+
+\subsection{Protezione}
+
+Un processore implementa i \textbf{maccanismi di protezione} di un sistema operativo:
+\begin{itemize}
+   \item[•] Impedisce ai processi di accedere a istruzioni privilegiate o a zone di memoria 
+   \item[•] I sistemi in genere hanno diverse modalità di esecuzione:
+      \begin{itemize}
+         \item[-] \textbf{modalità utente}, dove l'utente può eseguire solo un sottoinsieme delle istruzioni 
+         \item[-] \textbf{modalità kernel (kernel mode)}, dove il processore può accedree alle \textbf{istruzioni} e alle risorse \textbf{privilegiate} per conto dei processi 
+      \end{itemize}
+   \item[•] Principio del \textbf{privilegio minimo} - ad ogni utente minimi privilegi e accessi
+   \item[•] \textbf{Protezione} e gestione della \textbf{memoria}, previene che i processi accedano alla memoria che non gli è stata assegnata, implementato utilizzando \textbf{registri} del processore modificati solo da \textbf{istruzioni privilegiate}
+\end{itemize}
+
+\subsection{Interruzioni}
+
+\begin{itemize}
+   \item[•] \textbf{Interrupts} ed Eccezioni:
+      \begin{itemize}
+         \item[-] La maggiore parte dei \textbf{dispositivi} inviano un segnale chiamato \textbf{interrupt} al processore quando accade un evento
+         \item[-] Le \textbf{eccezioni} sono interrupt generati in risposta agli \textbf{errori}
+         \item[-] Il Sistema Operativo può rispondere agli interrupts notificandolo ai processi che sono in attesa su questi eventi
+      \end{itemize}
+   \item[•] \textbf{Timer}; un timer a intervalli \textbf{genera periodicamente un interrupt}. I S.O. utilizzano timer a intervalli per evitare che i processi 
+      monopolizzino il processore 
+   \item[•] \textbf{Clocks}; forniscono una misura di continuità
+\end{itemize}
+
+\subsection{Avvio}
+
+\begin{itemize}
+   \item[•] \textbf{Bootstrapping}: caricamento in memoria di componenti del sistema operativo \textbf{iniziali;}
+      \begin{itemize}
+         \item[-] Eseguita dal Basic Input/Output System (\textbf{BIOS}), che inizializza l'hardware di sistema e carica le istruzioni in memoria principale da una regione di memoria secondaria chiamata \textbf{settore di avvio} (boot)
+         \item[-] Se il sistema non è caricato, l'utente non può accedere ad alcuna componente hardware del computer 
+         \item[-] Evoluzione del BIOS: EFI (Extensible Firmware Interface) con interfaccia testuale (shell) e driver. L'utente può 
+            accedere ai dispositivi, dischi e rete.
+      \end{itemize}
+\end{itemize}
+\includegraphics[width=\linewidth]{png/16}
+
+\subsection{Processi}
+
+Per \textbf{processo} si intende un programma in esecuzione:
+\\
+\includegraphics[width=0.9\linewidth]{png/17}\\
+\includegraphics[width=0.9\linewidth]{png/18}
+\newpage 
+\textbf{stallo} dei processi:\\
+\includegraphics[width=0.9\linewidth]{png/19}
+
+\subsection{File System}
+
+\includegraphics[width=\linewidth]{png/20}\\
+
+\includegraphics[width=\linewidth]{png/21}\\
+
+\includegraphics[width=0.9\linewidth]{png/22}\\
+
+\subsection{Plug and Play}
+
+La tecnologia \textbf{plug and play} consente ai sistemi perativi di \textbf{configurare l'hardware} di nuova installazione \textbf{senza l'interazione dell'utente};
+\\
+\\
+• Per supportare plug and play, un dispositivo deve:
+\begin{itemize}
+   \item[-] \textbf{Identificarsi}  unicamente al sistema operativo 
+   \item[-] \textbf{Comunicare} con il sitema operativo per indicare le \textbf{risorse} e i \textbf{servizi} che il dispositivo richiede per far funzionare correttamente
+   \item[-] Identificare il \textbf{driver} che supporta il dispositivo e consentire al software di configurare il disp. (tipo assegnare il dispositivo a un canale DMA) 
+\end{itemize}
+
+\subsection{Cache, buffer, spool}
+
+\begin{itemize}
+   \item[•] \textbf{Cache}:
+      \begin{itemize}
+         \item[-] Memoria relativamente veloce 
+         \item[-] Mantiene \textbf{copie di dati} che saranno presto richiesti 
+         \item[-] Aumenta la \textbf{velocità} di esecuzione di un programma 
+         \item[-] Cache miss/hit significa: dati presenti o non presenti in cache 
+      \end{itemize}
+   \item[•] \textbf{Buffers}:
+      \begin{itemize}
+         \item[-] Area di \textbf{memorizzazione temporanea}, una specie di memoria di transito o intermedia
+         \item[-] Viene usata per il coordinamento delle \textbf{comunicazioni} tra i dispositivi a diverse velocità, per memorizzare dati utili all'elaborazione \textbf{asincrona},
+            per permettere ai \textbf{segnali} di essere consegnati in modo asincrono.
+      \end{itemize}
+   \item[•] \textbf{Spooling} (Simultaneous Pheripheal Operations On Line):
+      \begin{itemize}
+         \item[-] Tecnica di \textbf{buffering} in cui un \textbf{dispositivo intermedio} (come il disco) è interposto tra un processo e una periferica I/O lenta
+         \item[-] Permette ai processi di inviare operazioni di richiesta da una periferica senza aspettare che il dispositivo sia pronto a servire la richiesta
+      \end{itemize}
+\end{itemize}
+
+\subsection{Memoria virtuale}
+
+• Possibilità di eseguire programmi con \textbf{richieste di memoria maggiori} rispetto alla memoria fisica 
+• Primo sistema operativo con memoria virtuale $\rightarrow$ MULTICS 
+• Oggi in Unix e Windows 
+
+\subsection{Chiamate di sistema}
+
+• Nell'interfaccia del S.O.
+• Un processo utente attivo attraverso una TRAP 
+• Il controllo passa al sistema operativo 
+• Al termine il controllo ritorna all'istruzione successiva del processo utente 
+\\
+\includegraphics[width=\linewidth]{png/23}
+\\
+\includegraphics[width=\linewidth]{png/24}
+\\
+\includegraphics[width=\linewidth]{png/25}
+\\
+\includegraphics[width=\linewidth]{png/26}
+
+\section{Componenti e Obbiettivi}
+
+\begin{itemize}
+   \item[•] Sviluppo dei sistemi di elaborazione 
+      \begin{itemize}
+         \item[-] I sistemi di elaborazione sono evoluti 
+         \item[-] I primi sistemi non contenevano alcun tipo di sistema operativo 
+         \item[-] successivamente sono stati sviluppati i sistemi con \textbf{multiprogrammazione e timesharing}
+      \end{itemize}
+\end{itemize}
+
+\section{Architetture}
+\subsection{Architettura Monolitica}
+\begin{itemize}
+   \item[•] \textbf{Sistemi Operativi Monolitici}
+      \begin{itemize}
+         \item[-] Ogni componente è contenuto nel nucleo 
+         \item[-] Ogni componente può comunicare direttamente con qualsiasi altro componente 
+         \item[-] L'obiettivo è l'elevata \textbf{efficenza}
+         \item[-] Lo svantaggio principale è la difficoltà a identificare eventuali fonti di errore
+         \\\includegraphics[width=\linewidth]{png/27}
+      \end{itemize}
+   \item[•] Esempio di architettura monolitica:
+      \\\includegraphics[width=\linewidth]{png/28}
+\end{itemize}
+
+\subsection{Architettura a livelli}
+
+\begin{itemize}
+   \item[•] \textbf{Sistemi Operativi con approccio a livelli}
+      \begin{itemize}
+         \item[-] Obbiettivo $\rightarrow$ migliorare il \textbf{progetto} del nucleo monolitico, nei livelli i gruppi di componenti svolgono funzioni semplici.
+         \item[-] \textbf{Isolamento:} ogni livello comunica solo con strati immediatamento sopra e sotto 
+         \item[-] Le richieste dei processi eventualmente attraversano diversi
+                  strati prima del completamento
+         \item[-] Il throughput di sistema può essere meno efficiente dei sistemi
+                  con nuclei di SO monolitici. Ulteriori metodi devono essere invocati per passare i dati e il
+                  controllo
+                  \\\\
+                  \includegraphics[width=0.8\linewidth]{png/29}
+      \end{itemize}
+   \item[•] esempio:
+      \\
+      \includegraphics[width=0.7\linewidth]{png/30}
+\end{itemize}
+
+\subsection{Architettura Microkernel}
+
+\begin{itemize}
+   \item[•] Architettura di un \textbf{S.O. Microkernel}
+      \begin{itemize}
+         \item[-] Fornisce solo \textbf{servizi limitati}. Tentativo di contenere le dimensioni del kernel e garantire la scalabilità.
+         \item[-] Elevato grado di \textbf{modularità}. Estensibile, portabile e scalabile.
+         \item[-] AUmento del livello di comunicazione fra moduli, può portare ad una degradazione delle prestazioni del sistema.
+         \\
+         \\
+         \includegraphics[width=0.8\linewidth]{png/31}
+      \end{itemize}
+   \item[•] esempio:
+      \\
+      \includegraphics[width=\linewidth]{png/32}
+\end{itemize}
+
+\section{Macchina Virtuale}
+
+• \textbf{Le macchine virtuali (VMs)} sono un'astrazione software di un sistema di elaborazione, spesso in esecuzione sopra un SO nativo.
+\\
+Il sistema Operativo gestisce le risorse fornite dalla macchina virtuale.\\
+Le applicazioni delle macchine V. permettono la coesistenza di \textbf{diverse istanze} di un sistema operativo eseguibili 
+contemporaneamente. Si parla di \textbf{Emulazione}, software o hardware, che imita le funzionalità di hardware o software non presente nel sistema.
+\\
+Facilità la \textbf{portabilità}.
+
+\section{Sistemi Operativi di Rete e Sistemi Operativi Distribuiti}
+
+\subsection{Sistema Operativo di Rete}
+
+Viene eseguito su un computer, permette ai suoi processi di accedere alle risorse sui compuer remoti.
+\\
+\\
+\includegraphics[width=0.9\linewidth]{png/33}
+
+\subsection{Sistema Operativo Distribuito}
+
+Sistema O. unico, gestisce le risorse su un insieme di sistemi (compuer). Gli obbiettivi includono; trasparenza di accesso, uso, prestazioni, replicazione ..., Scalabilità, tolleranza ai guasti e consistenza.\\
+\textbf{Middleware} è un software per sistemi distribuiti, questo sfotware permette \textbf{interazioni} tra più processi in esecuzione su uno o più computer nella rete. Facilita sistemi distribuiti \textbf{eterogenei}. \textbf{Semplifica} la programmazione delle applicazioni.
+\\
+\includegraphics[width=0.9\linewidth]{png/34}
+
+
+\end{document}
