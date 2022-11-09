@@ -1,0 +1,958 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+
+\title{Basi di Dati}
+\author{Alex Narder}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Contenuti del corso}
+\begin{itemize}
+   \item[•] Sistemi per Basi di Dati
+   \item[•] Modello dei dati
+   \item[•] Progettazione di Basi di dati
+   \item[•] Modello relazionale
+   \item[•] SQL per la definizione, la manipolazione e la consultazione dei DB
+   \item[•] Teoria della normalizzazione
+   \item[•] Amministazione di una basi di dati
+   \item[•] Programmazione di applicazioni che utilizzano basi di dati
+   \item[•] Applicazione: Flask + SQLAlchemy
+   \item[•] NoSQL: Modelli di rappresentazione dell’informazione diversi da quello relazionale
+\end{itemize}
+\newpage
+
+\section{Introduzione}
+
+Le \textbf{basi di dati} sono ovunque, le troviamo alla base di sistemi informativi aziendali, sistemi informativi territoriali,
+applicazioni internet, basi di dati distribuite, sistemi di supporto alle decisiomi, data mining ...
+\\
+\\
+\includegraphics[width=\linewidth]{1.png}
+
+\section{Oranizzazioni e sistemi informativi}
+
+• Le organizzazioni hanno bisogno di gestire le informazioni per realizzare le proprie attività.
+\\
+• Un sistema informativo di un'organizzazione serve per la raccolta e acquisizione, l’archiviazione, conservazione l’elaborazione, trasformazione, produzione la distribuzione, comunicazione e lo scambio delle informazioni necessarie alle attività dell’organizzazione.
+\\
+Sistema informativo nelle organizzazioni:\\
+\includegraphics[width=\linewidth]{2}
+\newpage
+\section{Sistemi Informatici}
+
+• Il \textbf{sistema informatico} è l’insieme delle tecnologie informatiche e della
+comunicazione (Information and Communication Technologies, ICT) a supporto
+delle attività di un’organizzazione.
+\\
+• Il \textbf{sistema informativo automatizzato} è quella parte del sistema informativo in cui
+le informazioni sono raccolte, elaborate, archiviate e scambiate usando un sistema
+informatico.
+\\
+\\
+Sistema informatico nelle organizzazioni:\\
+\\
+\includegraphics[width=\linewidth]{3}
+\newpage
+\section{Informazioni e dati}
+
+• Nei \textbf{}sistemi informatici le \textbf{informazioni} vengono rappresentate in modo essenziale attraverso i dati.
+\\
+• \textbf{Informazione}: notizia, dato o elemento che consente di avere conoscenza più o
+meno esatta di fatti, situazioni, modi di essere.
+\\
+• \textbf{Dato}: ciò che è immediatamente presente alla conoscenza, prima di ogni
+elaborazione; (in informatica) elementi di informazione costituiti da simboli che
+debbono essere elaborati.
+
+\section{Classificazione dei Sistemi Informatici}
+\begin{itemize}
+   \item[•] \textbf{Sistemi Informatici Operativi}:
+      \begin{itemize}
+         \item[-] I dati sono organizzati in BD
+         \item[-] Le applicazioni si usano per svolgere le classiche \textbf{attività strutturate e ripetitive}
+dell'azienda nelle aree amministrativa e finanziaria, vendite, produzione, risorse
+umane ecc. (calcolo paghe, emissione fatture, magazzino, ...)
+      \end{itemize}
+\end{itemize}
+
+\includegraphics[width=0.8\linewidth]{4}\\
+\includegraphics[width=1.2\linewidth]{6}
+
+\begin{itemize}
+   \item[•] \textbf{Sistemi Informatici Direzionali}:
+      \begin{itemize}
+         \item[-] La direzione intermedia e alta necessitano di: \textbf{analisi storiche} e \textbf{produzione interattiva} di rapporti di sintesi
+         \item[-] Le basi di dati operative risultano inadeguate: contengono solo \textbf{dati recenti} e le operazioni coinvolgono grandi quantità di dati o sono molto complesse e
+quindi rallenterebbero in modo inaccettabile le funzioni operative 
+         \item[-] I dati sono organizzati in \textbf{Data Warehouse (DW)}
+         \item[-] Sono gestiti da un opportuno \textbf{sistema per analisi interattive dei dati}
+         \item[-] Usano \textbf{applicazioni di business intelligente} come strumenti di supporto ai processi di controllo delle presentazioni aziendali e di decisione manageriale
+      \end{itemize}
+\end{itemize}
+\includegraphics[width=0.9\linewidth]{5}\\
+\\
+\\
+\includegraphics[width=1.1\linewidth]{7}
+
+\section{Sistemi per la gestione di Basi di Dati (DBMS)}
+\subsection{Baso di dati (gestite da DBMS)}
+In generale una qualsiasi raccolta di informazioni permanenti gestite tramite un elaboratore elettronico è 
+considerata una base di dati, ma per noi:
+\\
+Una \textbf{Base di dati} è una suddivisa in due categorie:
+\begin{itemize}
+   \item[•] \textbf{Metadati}: definiscono lo schema della BD, che descrive:
+      \begin{itemize}
+         \item[-] struttura dei dati
+         \item[-] restrizioni sui valori ammissibili, quindi i \textbf{vincoli di integrità}
+         \item[-] utenti autorizzati
+      \end{itemize}
+   \item[•] \textbf{Dati}: le rappresentazioni di certi fatti conformi alle definizioni dello schema, con le seguenti caratteristiche:
+      \begin{itemize}
+         \item[-] sono organizzati in \textbf{insiemi omogenei}, fra i quali sono definite delle \textbf{relazioni}.
+            La loro struttura e le relazioni sono descritte usando il \textbf{modello dei dati }adottato. Per esempio una collezione di dati che contiene studenti, una che contiene classi, ecc. ecc.
+         \item[-] sono \textbf{molti} rispetto ai metadati, e non possono essere gestiti in memoria temporanea
+         \item[-] sono \textbf{permanenti}, continuano a esistere fino a quando non vengono rimossi
+         \item[-] sono \textbf{utilizzabili contemporaneamente} da diversi utenti
+         \item[-] sono \textbf{protetti} sia da accessi non autorizzati che da corruzione dovuta a guasti di harware o software
+         \item[-] sono accessibili tramite \textbf{transazioni}, unità di lavoro atomiche che non possono avere effetti parziali, quindi devono andare tutte a buon esito, altrimenti falliscono tutte. Come se fosse una singola operazione, anche se in realtà sono più di una.
+      \end{itemize}
+\end{itemize}
+\newpage
+\subsection{Sistemi per Basi di Dati -$>$ DBMS}
+
+\textbf{definizione:} Un \textbf{DBMS (data Base Management System)} è un sistema centralizzato o distribuito che offre opportuni linguaggi e strumenti per:\\
+\begin{itemize}
+   \item[-] \textbf{definire lo schema} del DB (che va definito prima di creare dati, definito attraverso il modello dei dati del DBMS, interrogabile con le stesse modalità previste per i dati)
+   \item[-] scegliere le \textbf{strutture dati} per la memorizzazione dei Dati
+   \item[-] \textbf{memorizzare} i dati rispettando i vincoli definiti nello schema
+   \item[-] \textbf{recuperare e modificare} i dati interattivamente (tramite un linguaggio di interrogazione, anche detto \textbf{query language})
+\end{itemize}
+
+Architettura dei DBMS centralizzati:\\
+
+\includegraphics[width=0.95\linewidth]{8}
+
+\includegraphics[width=0.8\linewidth]{16}\\
+\includegraphics[width=0.8\linewidth]{17}\\
+\includegraphics[width=0.8\linewidth]{18}\\
+\includegraphics[width=0.8\linewidth]{19}\\
+\includegraphics[width=0.75\linewidth]{20}
+
+\section{Funzionalità dei DBMS}
+\begin{itemize}
+   \item[•] Linguaggio per la \textbf{definizione dei DB (DDL)}, \textbf{data definition language}
+   \item[•] Linguaggi per l'\textbf{uso dei dati (DML)}, \textbf{data manipulation language}
+   \item[•] Meccanismi per il \textbf{controllo dei dati}
+   \item[•] Strumenti per il \textbf{responsabile del DB}
+   \item[•] Strumento per lo \textbf{sviluppo delle applicazioni}
+\end{itemize}
+
+\section{DDL: Definizione dei DB}
+
+Per definire la base di dati si usa il DDL, la descrizione del DB è indipendente dalle applicazioni che la usano.\\
+Vogliamo che il DB abbia una sua vita indipendente nonostante le applicazioni che vanno ad usarla.
+\\
+\\
+Ci sono 3 livelli di descrizione dei dati;\\
+- livello di vista logica\\
+- livello logico, qui si descrive la struttuta e i vincoli della base di dati (sono raccolti nello schema logico)\\
+- livello fisico\\
+
+\includegraphics[width=0.8\linewidth]{10}
+\newpage
+
+   \subsection{Livello vista logica} Descrive come deve apparire la struttura della base di dati ad una certa
+      applicazione (\textbf{schema esterno o vista}).\\
+      \includegraphics[width=0.8\linewidth]{11}
+   \subsection{Livello logico} Schema logico: Descrive la \textbf{struttura degli insiemi di dati e delle relazioni} fra
+      questi, secondo un certo modello dei dati, senza nessun riferimento alla loro
+      organizzazione fisica nella memoria permanente.\\
+      \includegraphics[width=0.8\linewidth]{12}
+   \subsection{Livello fisico} Descrive lo \textbf{schema fisico} o \textbf{interno}: come vanno organizzati fisicamente i dati nelle memorie permanenti, strutture dati ausiliarie per l’uso (es. indici). Un indice è quella "cosa" che mi permette di recuperare in maniera veloce un'informazione.\\
+      \includegraphics[width=0.8\linewidth]{13}
+
+
+\subsection{\textbf{Indipendenza fisica e indipendenza logica:\\}}
+\begin{itemize}
+   \item[•] \textbf{Indipendenza fisica}: i programmi applicativi non devono essere modificati in
+      seguito a modifiche dell’organizzazione fisica dei dati. Quindi se io vado a cambiare qualcosa non devo modificare i programmi applicativi. \\
+      \includegraphics[width=1\linewidth]{14}
+   \item[•] \textbf{Indipendenza logica}: i programmi applicativi non devono essere modificati in
+      seguito a modifiche dello schema logico. \\
+      \includegraphics[width=1\linewidth]{15}
+\end{itemize}
+
+\section{DML: linguaggi per l'uso dei dato}
+
+Un DBMS prevede varie modalità d’uso per soddisfare le esigenze delle diverse
+\textbf{categorie di utenti} che possono accedere alla base di dati:\\
+- \textbf{Utenti delle applicazioni}, nessun tipo di accesso elaborato\\
+- \textbf{Utenti non programmatori}, hanno bisogno di agire in modo più evoluto rispetto agli utenti delle app.\\
+- \textbf{Programmatori delle applicazioni}, utenti che hanno bisogno di operare in maniera intensiva nei DB.\\
+\begin{itemize}
+   \item[•] \textbf{Utenti non programmatori}:
+      \begin{itemize}
+         \item[-] Interfaccia grafica per accedere ai dati in modo semplice.
+         \item[-] Linguaggio per interrogazione
+      \end{itemize}
+   \item[•] \textbf{Utenti programmatori}:
+      \begin{itemize}
+         \item[-] Linguaggio integrato (dati e DML): Linguaggio pensato per SQL, i comandi SQL sono controllati staticamente dal traduttore ed eseguiti dal DBMS
+         \item[-] Linguaggio convenzionale + funzioni di libreria predefinita: Linguaggio convenzionale che usa delle funzioni di una libreria predefinita
+per usare SQL. I comandi SQL sono stringhe passate come parametri alle
+funzioni che poi vengono controllate dinamicamente dal DBMS prima di
+eseguirle.
+         \item[-] Linguaggio che ospita l'SQL (SQL embedded): Linguaggio convenzionale esteso con un nuovo costrutto per marcare i
+            comandi SQL. Occorre un \textbf{pre-compilatore} che controlla i comandi SQL, li
+sostituisce con chiamate a funzioni predefinite e genera un programma nel
+linguaggio convenzionale + funzioni di libreria
+      \end{itemize}
+\end{itemize}
+
+\section{Controllo dei Dati}
+
+\subsection{DBMS: controllo dei dati}
+
+Sono dei meccanismi offerti per garantire le seguenti proprietà:
+\begin{itemize}
+   \item[•] \textbf{Integrità}, mantenimento delle proprietà specificate in modo dichiarativo nello
+schema (vincoli d’integrità)
+   \item[•] \textbf{Sicurezza}, protezione dei dati da usi non autorizzato:
+      \begin{itemize}
+         \item[-] restrizione dell'accasso ai \textbf{soli utenti autorizzati}
+         \item[-] \textbf{limitazione delle operazioni esegiubili}
+      \end{itemize}
+   \item[•] \textbf{Affidabilità}, protezione dei dati da:
+      \begin{itemize}
+         \item[-] \textbf{interferenze} indesiderate dovute all’accesso concorrente ai dati da parte di
+più utenti
+         \item[-] \textbf{malfunzionamenti hardware o software} (fallimenti di transazione, fallimenti
+di sistema, disastri)
+      \end{itemize}
+\end{itemize}
+
+\subsubsection{Protezione da interferenze indesiderate tra accessi concorrenti ai dati}
+\begin{itemize}
+   \item[•] Basterebbe impedire l'inizio di una transazione prima che un'altra inizio
+   \item[•] scheduling dei singoli passi di ciascuna transazione in {T1, ..., Tn} che
+garantisca che l’effetto complessivo sarebbe ottenibile eseguendo le transazioni
+isolatamente in qualche ordine\\
+      \includegraphics[width=\linewidth]{21}
+\end{itemize}
+
+\subsubsection{Protezione da malfunzionamenti hardware o software}
+\begin{itemize}
+   \item[•] \textbf{fallimenti di transazione}: dovuta a una situazione prevista dall’applicazione o a
+eventi imprevisti, come la violazione di vincoli di integrità o accessi non
+autorizzati
+   \item[•] \textbf{fallimenti di sistema}: dovuti ad un’anomalia HW o SW dell'unità centrale o di
+una periferica, che determina l'interruzione di tutte la transazioni attive e la
+perdita del contenuto della memoria temporanea
+   \item[•] \textbf{disastri}: danni alla memoria permanente
+\end{itemize}
+
+\subsection{DBMS: Controllo dei dati: Transazioni}
+
+Una \textbf{transazione} è una sequenza di azioni di lettura e scrittura in
+memoria permanente e di elaborazioni di dati in memoria temporanea, con le
+seguenti proprietà:
+\begin{itemize}
+   \item[•] \textbf{Atomicità}, le transazioni che terminano prematuramente sono trattate dal sistema come se 
+   non fossero mai iniziate, quindi eventuali effetti sul DB sono annullati
+   \item[•] \textbf{Serializzabilità}, nel caso di esecuzioni concorrenti di più transazioni, l’effetto
+complessivo è quello di una esecuzione seriale
+   \item[•] \textbf{Persistenza}, Le modifiche sulla base di dati di una transazione terminata
+normalmente sono permanenti, cioè non sono alterabili da eventuali
+malfunzionamenti
+\end{itemize}
+
+\section{Strumenti per l'amministazione}
+\subsection{DBMS: strumenti per l'amministrazione}
+
+\begin{itemize}
+   \item[•] Linguaggio per la definizione e la modifica degli schemi della base di dati
+- logico, esterno, e fisico
+\item[•] Strumenti per il controllo e messa a punto del funzionamento del sistema.
+\item[•] Strumenti per stabilire i diritti di accesso ai dati 
+\item[•] Strumenti per ripristinare la base di dati in caso di malfunzionamenti di sistemi o disastri 
+\end{itemize}
+
+\subsection{riepilogo dei vantaggi dei DBMS}
+
+\begin{itemize}
+   \item[•] indipendenza fisica e logica 
+   \item[•] gestione efficiente dei dati 
+   \item[•] integrità e sicurezza dei dati  
+   \item[•] accessi interattivi, concorrenti e protetti da malfunzionamenti
+   \item[•] amministrazione dei dati
+   \item[•] riduzione dei tempi di sviluppo delle applicazioni 
+\end{itemize}
+
+\subsection{riepilogo degli svantaggi dei DBMS}
+
+\begin{itemize}
+   \item[•] Possono essere costosi e complessi da installare e mantenere in esercizio.
+   \item[•] Richiedono personale qualificato (se si tratta di personale esterno, aumenta la
+dipendenza da ditte esterne) 
+   \item[•] Le applicazioni sviluppate possono essere trasferite con difficoltà su sistemi diversi
+se vengono usati linguaggi troppo “legati” al DBMS usato
+   \item[•] La riduzione dei costi della tecnologia e i possibili tipi di DBMS disponibili sul
+mercato facilitano la loro diffusione
+\end{itemize}
+
+\section{Progettazione e Modellazione}
+
+\begin{itemize}
+   \item[•] Progettare una base di dati significa progettare la:
+      \begin{itemize}
+         \item[-] struttura dei dati
+         \item[-] applicazioni
+      \end{itemize}
+   \item[•] La progettazione della struttura dei dati è l'attività fondamentale
+   \item[•] Richiede di specificare un modello della realtà di interesse (\textbf{universo del
+   discorso}) quanto più possibile fedele
+   \item[•] Per questo ci concentreremo sulla modellazione:
+      \begin{itemize}
+         \item[-] cosa significa definire un modello?
+         \item[-] cosa si modella?
+         \item[-] come si modella (quale formalismo)?
+      \end{itemize}
+\end{itemize}
+\newpage
+\section{Modello dei Dati e Progettazione}
+\subsection{Modelli Informatici}
+Un \textbf{modello astratto} è la rappresentazione formale di idee e
+conoscenze relative a un fenomeno.
+\\
+\\
+• Aspetti di un modello:
+\begin{itemize}
+   \item[-] il modello è la \textbf{rappresentazione di certi fatti};
+   \item[-] la rappresentazione è data con un \textbf{linguaggio formale};
+   \item[-] il modello è il risultato di un \textbf{processo di interpretazione}, guidato dalle idee
+e conoscenze possedute dal soggetto che interpreta.
+\end{itemize}
+
+\subsection{Progettazione di un DB}
+
+\includegraphics[width=0.7\linewidth]{22}
+\\
+Ogni una di queste fasi è incentrata sulla modellazione.
+
+\newpage
+
+\section{Modellazione concettuale}
+
+\subsection{Aspetti del problema}
+
+\begin{itemize}
+   \item[•] Quale conoscenza del dominio nel discorso si rappresenta?\\
+      \textbf{()aspetto ontologico)}
+   \item[•] Con quali meccanismi di astrazione si modella?\\
+      \textbf{(aspetto logico)}
+   \item[•] Con quale linguaggio formale si definisce il modello?\\
+      \textbf{(aspetto linguistico)}
+   \item[•] Come si procede per costruire un modello?\\
+      \textbf{(aspetto pragmatico)}
+\end{itemize}
+
+\section{Cosa si modella?}
+
+\begin{itemize}
+   \item[•] \textbf{Conoscenza concreta}: I fatti
+   \item[•] \textbf{Conoscenza astratta}: Struttura e vincoli sulla conoscenza concreta 
+   \item[•] \textbf{Conoscenza procedurale}: Le operazioni di base e le operazioni degli utenti
+   \item[•] \textbf{Comunicazioni}: Come si comunicherà con il sistema informatico 
+\end{itemize}
+
+\subsection{Conoscenza concreta}
+
+• Fatti specifici che si vogliono rappresentare:
+- \textbf{le entità} con le loro \textbf{proprietà}
+- le \textbf{collezioni} di identità omogenee
+- le \textbf{associazioni} fra entità
+
+\subsubsection{entità e proprietà}
+
+• Le \textbf{entità} sono ciò di cui interessa rappresentare alcuni fatti (\textbf{o proprietà}):\\
+oggetti concreti, oggetti astratti ed eventi.
+\\
+Come ad esempio un libro, una descrizione bibliografica o un prestito.
+\\
+\\
+• Le \textbf{proprietà} si distinguono dalle entità poichè sono fatti che interessano solo perchè descrivono caratteristiche di determinata identità
+\\
+come ad esempio: indirizzo che interessa solo in quanto indirizzo di un utente.
+\\
+\\
+nota: un'entità non coincide con i valori delle sue proprietà.
+\\
+\\
+• Una \textbf{proprietà} è una coppia $<$Attributo, valore di un certo tipo$>$.
+\\
+\\
+• Classificazione delle proprietà:\\
+- \textbf{atomica o strutturata}\\
+- \textbf{univoca / multivalore}\\
+- \textbf{totale / parziale}
+\\
+\\
+• Esempi:\\
+- nome (atomica, univoca, totale)\\
+- residenza = [indirizzo, cap, città] (strutturata)\\
+- recapiti telefonici (multivalore, parziale)
+
+\subsubsection{Collezioni di entità}
+
+• \textbf{Tipi di entità}: ogni entità ha un \textbf{tipo} che ne specifica la natura (identifica caratteristiche: proprietà e dominio relativo).
+\\
+\\
+es: Antonio ha tipo \textbf{Persona} con proprietà:\\
+$-\;Nome\;:\; string$\\
+$-\;Indirizzo\;:\; string$\\
+\\
+es2:\\
+\includegraphics[width=\linewidth]{23}
+\\
+• \textbf{Collezione (classe)}: un insieme variabile nel tempo di entità omogenee, ovvero dello stesso tipo.
+\\
+\\
+es: \textbf{Studenti}: insieme di tutti gli studenti nel dominio del discorso 
+\\
+\\
+es2:\\
+\includegraphics[width=1.05\linewidth]{24}
+
+\subsubsection{Scelta delle entità e delle proprietà}
+
+Certi fatti possono essere interpretati come proprietà in certi contesti e come entità in altri, per esempio:\\
+\\
+• \textbf{Descrizione bibliografica} con proprietà; \textbf{Autori, Titolo, Editore, Anno}\\
+\\oppure\\
+\\
+• \textbf{Autore} con proprietà \textbf{Nome, Nazionalità, AnnoNascita, }...\\
+\\• \textbf{Editore} con proprietà \textbf{Nome, Indirizzo, e-mail,} ...\\
+\\• \textbf{Descrizione} biblioteca con proprietà \textbf{Titolo, Anno, ... }
+
+\subsubsection{Gerarchie}
+
+• Spesso le collezioni di enrità sono organizzate in una gerarchia di \textbf{specializzazione/generalizzazione} (si parla anche di 
+\textbf{sottoclassi} e \textbf{superclassi}).
+\\
+\\
+• Es: nel DB della biblioteca la collezione degli $Utenti$ può essere considerata una 
+generalizzazione di $Studenti$ e $Docenti$
+\\
+\\
+• Due importanti caratteristiche delle gerarchie:
+\\- \textbf{ereditarietà} proprietà 
+\\-\textbf{ inclusione}: se la collezione C1 specializza C2, gli elementi di C1 sono un sottoinsieme degli elementi di C2.
+\\
+\\
+\underline{Problema: scelta delle sottoclassi $\rightarrow$}\\
+\includegraphics[width=\linewidth]{25}
+
+\subsubsection{Associazioni}
+
+\begin{itemize}
+   \item[•] Un'\textbf{istanza di associazione} è un fatto che correla due o più entità, 
+      stabilendo un legame logico tra di loro.
+      \begin{itemize}
+         \item[-] la descrizione bibliografica con titolo "$Basi\;di\;Dati$" riguarda il documento 
+            con collocazione "$D3-55-2$"
+         \item[-] l'utente "$Tizio$" ha in prestito una copia della "$Divina Commedia$"
+      \end{itemize}
+   \item[•] Un'\textbf{associazione} R(X,Y) fra due collezioni di entità X e Y è un insieme di istanze 
+      di associazione tra elementi di X e Y, che varia in generale nel tempo. Il prodotto cartesiano (X * Y) è 
+      detto \textbf{dominio} dell'associazione.
+   \item[•] esempio:
+      \\
+      \\
+      \includegraphics[width=1.05\linewidth]{26}
+   \item[•] Tipi di associazione: Un'associazione è caratterizzata dalle seguenti proprietà strutturali:
+      \begin{itemize}
+         \item[-] \textbf{molteplicità} (o cardinalità)
+         \item[-] \textbf{totalità}
+      \end{itemize}
+\end{itemize}
+
+\subsubsection{Tipi di associazione: Molteplicità}
+\begin{itemize}
+   \item[•] \textbf{Vincolo di univocità:}
+      \begin{itemize}
+         \item[-] Un'associazione R(X,Y) è \textbf{univoca da X a Y} se per ogni elemento x di X
+         esiste al più un elemento di Y che è associato ad x; se non vale questo
+            vincolo, l’associazione è \textbf{multivalore da X a Y}.
+      \end{itemize}
+   \item[•] \textbf{Cardinalità:}
+      \begin{itemize}
+         \item[-] \textbf{R(X,Y) è (1:N)} se essa è \underline{multivalore} da X a Y ed \underline{univoca} da Y a X
+         \item[-] \textbf{R(X,Y) è (N:1)} se essa è \underline{univoca} da X a Y e \underline{multivalore} da Y a X
+         \item[-] \textbf{R(X,Y) è (N:M)} se essa è \underline{multivalore} da X a Y e \underline{multivalore} da Y a X
+         \item[-] \textbf{R(X,Y) è (1:1)} se essa è \underline{univoca} su da X a Y e \underline{univoca} da Y a X
+      \end{itemize}
+   \item[•] esempi:\\
+      \includegraphics[width=\linewidth]{27}
+\end{itemize}
+
+\subsubsection{Tipi di associazione: Totalità}
+
+\begin{itemize}
+   \item[•] \textbf{Vincolo di totalità}: Un'associazione R(X,Y) è \textbf{totale} da X a Y se per ogni elemento x di X 
+      esiste almeno un elemento di Y che è associato ad x; se non vale questo vincolo, l'associazione è \textbf{parziale} da X a Y.
+      \\
+      \\
+      Esempio: $Insegna(Professori,\;Corsi)$ è totale su $Corsi$ in quanto non può esistere un corso 
+      del piano di studi senza il corrispondente docente che lo tiene, parziale su $Professori$, in quanto un professore potrebbe non tenere corsi.
+   \item[•] esempi:\\
+      \includegraphics[width=0.8\linewidth]{28}
+\end{itemize}
+
+\subsection{Conoscenza Astratta}
+
+Fatti generali che descrivono:
+
+\begin{itemize}
+   \item[•] la \textbf{struttura della conoscenza concreta}
+      \begin{itemize}
+         \item[-] \textbf{collezioni}: nomi, tipo degli elementi (nome, dominio, caratteristiche delle proprieta)
+         \item[-] \textbf{associazioni}: nomi, collezioni correlate, proprietà strutturali 
+      \end{itemize}
+   \item[•] restrizioni sui \textbf{valori possibili} della conoscenza concreta e sui modi in cui esse 
+      possono \textbf{evolvere} nel tempo (vincoli di integrità)
+   \item[•] regole per \textbf{derivare} nuovi fatti da altri noti 
+\end{itemize}
+
+\subsubsection{Vincoli di Integrità}
+
+Ce ne sono due tipi:
+
+\begin{itemize}
+   \item[•] \textbf{Vincoli di integrità statici}: definiscono delle condizioni sui valori della conoscenza concreta che devono essere soddisfatte 
+      indipendentemente da come evolte l'universo del discorso 
+      \\
+      \\Es: $Stipendio$ deve essere positivo, $Matricola$ è una chiave, ...
+   \item[•] \textbf{Vincoli di integrità dinamici}: definiscono delle condizioni sul modo in cui la 
+      conoscenza concreta può evolvere nel tempo 
+      \\
+      \\Es: $DataNascita$ non può cambiare, uno studente iscritto ad un corso di laurea non può iscriversi nuovamente, ...
+\end{itemize}
+
+\subsubsection{Fatti derivabili}
+
+Fatti derivabili:
+
+\begin{itemize}
+   \item[•] L'età di una persona, ricavabile per differenza fra l'anno attuale e il suo anno di nascita 
+   \item[•] La media dei voti degli esami superati da uno studente, derivabile attraverso dei calcoli 
+\end{itemize}
+
+\section{Come si modella?}
+
+\subsection{Modello dei dati a oggetti}
+
+\begin{itemize}
+   \item[•] Un \textbf{modello dei dati} è un insieme di meccanismi di astrazione per descrivere la struttura della conoscenza concreta (\textbf{schema})
+   \item[•] Uno schema verrà dato usando una notazione grafica, variante dei cosiddetti
+      \textbf{diagrammi ER} (Entità-Relazione)
+   \item[•] Nozioni fondamentali:
+      \begin{itemize}
+         \item[-] Oggetto, Tipo di oggetto, Classe 
+         \item[-] Ereditarietà, Gerarchia fra tipi, Gerarchia fra classi 
+      \end{itemize}
+\end{itemize}
+
+\subsection{Questioni terminologiche}
+
+\includegraphics[width=\linewidth]{29}
+
+\newpage
+
+\subsection{Oggetto}
+
+\begin{itemize}
+   \item[•] Ad ogni \textbf{entità} del dominio corrisponde un \textbf{oggetto} del modello informatico 
+   \item[•] Un oggetto è un'entità software con \textbf{stato, comportamente e identità}
+      \begin{itemize}
+         \item[-] Lo \textbf{stato} è modellato da un insieme di \textbf{costanti o variabili} con valori di qualsiasi 
+            complessità
+         \item[-] Il \textbf{comportamento} è modellato da un insieme di procedure locali (con parametri) chiamate \textbf{metodi} 
+         \item[-] L'\textbf{identità} è associata all'oggetto dalla creazione e non viene modificata da aggiornamenti dello stato 
+      \end{itemize}
+   \item[•] Un oggetto può rispondere a richieste, dette \textbf{messaggi}, restituendo valori memorizzati 
+      nello stato o calcolati con una procedura locale 
+\end{itemize}
+
+\subsection{Tipo Oggetto}
+
+\begin{itemize}
+   \item[•] Il primo passo nella costruzione di un modello consiste nella \textbf{classificazione}
+      \textbf{delle entità del dominio} con la identificazione di collezioni omogenee e la
+      definizione dei \textbf{tipi degli oggetti} che le rappresentano
+   \item[•] Un \textbf{tipo oggetto} definisce:
+      \begin{itemize}
+         \item[-] componenti dello stato 
+         \item[-] metodi
+      \end{itemize}
+   \item[•] Noi useremo solo un paio di concetti elementari del modello a oggetti
+   \item[•] Oggetto:
+      \begin{itemize}
+         \item[-] identità
+         \item[-] stato (insieme di attributi)
+      \end{itemize}
+   \item[•] no metodi, no incapsulamento, ecc.
+\end{itemize}
+
+\subsection{Classi}
+
+Una classe è un insieme di oggetti dello stesso tipo, modificabile con operatori per
+includere o estrarre elementi dall’insieme, associabile a vincoli di integrità.
+\\
+\includegraphics[width=\linewidth]{30}
+Una classe \textbf{$Persone$} a diversi livelli di specifica
+\\
+\begin{itemize}
+   \item[•] I tipi degli attributi possono essere:
+      \begin{itemize}
+         \item[-] \textbf{primitivi} (int, bool, string, date, real)
+         \item[-] \textbf{non primitivi}
+      \end{itemize}
+   \item[•] \textbf{Tipi non primitivi:} ottenuti applicando i seguenti operatori ad altri tipi:
+      \begin{itemize}
+         \item[-] \textbf{tipo record}; [A1;T1; ... , An:Tn]
+         \item[-] \textbf{tipo enumerazione}; [Val1; ... ; Valn]
+         \item[-] \textbf{tipo sequenza}; seq T
+      \end{itemize}
+\end{itemize}
+
+\subsection{Associazioni}
+
+\begin{itemize}
+   \item[•] Le associazioni si modellano con un costrutto apposito
+   \item[•] Le associazioni possono avere delle \textbf{proprietà}
+   \item[•] Le associazioni possono essere \textbf{ricorsive}
+   \item[•] Associazioni n-arie
+\end{itemize}
+\includegraphics[width=0.6\linewidth]{31}
+
+\subsection{Associazioni n-arie}
+
+\includegraphics[width=\linewidth]{32}
+
+\subsection{Descrizione di un caso}
+
+Si vogliono modellare alcuni fatti riguardanti una biblioteca universitaria:
+
+\begin{itemize}
+   \item[•] le \textbf{descrizioni bibliografiche} dei libri, opere con un solo volume ...
+   \item[•] i \textbf{termini del thesaurus} (parole chiave)
+   \item[•] le \textbf{copie dei libri} disponibili che corrispondono ad una descrizione bibliografica
+   \item[•] gli \textbf{autori} dei libri 
+   \item[•] gli \textbf{utenti} della biblioteca
+   \item[•] i \textbf{prestiti} in corso 
+\end{itemize}
+Le Descrizioni Bibliografiche dei libri a volume unico, sia già disponibili che quelli
+ordinati ma non ancora consegnati alla biblioteca, sono caratterizzati dal Codice
+ISBN (International Standard Book Number) che le identifica, titolo del libro, autori,
+editore, anno di pubblicazione e termini che le descrivono.\\
+Degli autori dei libri interessano il codice fiscale, il nome e cognome, la nazionalità
+e la data di nascita.\\
+I libri, disponibili in una o più copie ognuna identificata da un Codice, una stringa
+con la loro collocazione e numero.\\
+Quando un utente prende un libro in prestito, si registrano i dati dell'utente, se non
+sono già presenti, la data del prestito e la data di restituzione. Di un utente
+interessano il codice fiscale, il nome, il cognome, l'indirizzo e i recapiti telefonici.
+Un utente può avere più libri in prestito. I dati su un prestito interessano fino al
+momento della restituzione del libro.\\
+\\
+Il thesaurus è un insieme di termini, e di associazioni fra di loro, che costituiscono il
+lessico specialistico da usare per descrivere il contenuto dei libri.\\
+Fra i termini del thesaurus interessano le seguenti relazioni, fra le tante possibili:
+\\
+\begin{itemize}
+   \item[•] \textbf{Preferenza}, per rimandi da termini standard a termini non standard e viceversa.
+            Per esempio:
+      \begin{itemize}
+         \item[-] Elaboratore \textbf{Standard (vedi)} Calcolatore;
+         \item[-] Calcolatore \textbf{Sinonimi (UsatoPer)} Elaboratore, Calcolatore, Stazione di lavoro 
+      \end{itemize}
+   \item[•] \textbf{Gerarchia}, per mettere in evidenza il rapporto specificità-generalità tra due
+            termini. Per esempio:
+      \begin{itemize}
+         \item[-] Felino \textbf{PiùSpecifico} Gatto Leone Tigre;
+         \item[-] Gatto \textbf{PiùGenerale} Felino
+      \end{itemize}
+\end{itemize}
+
+\underline{\textbf{Esempio di Biblioteca:}}
+\\
+\\
+\includegraphics[width=1.1\linewidth]{33}
+
+\subsection{Gerarchia tra tipi oggetto}
+
+\begin{itemize}
+   \item[•] Relazione di \textbf{sottotipo <=}, tra i tipi oggetto 
+   \item[•] Se \textbf{t è sottotipo di t' (t <= t')}
+      \begin{itemize}
+         \item[-] gli elementi di tipo t possono essere usati in ogni contesto 
+            in cui possano apparire elementi di tipo t' (\textbf{sostitutività})
+      \end{itemize}
+   \item[•] In particolare:
+      \begin{itemize}
+         \item[-] gli elementi di t hanno tutti gli attributi degli elementi di t' 
+         \item[-] per ogni attributo A in t', il suo tipo in t è sottotipo del suo tipo in t'
+      \end{itemize}
+\end{itemize}
+
+\subsection{Ereditarietà}
+
+\begin{itemize}
+   \item[•] \textbf{Ereditarietà (inheritance)}: permette di definire un tipo oggetto a partire da un altro "per differenza"
+      \begin{itemize}
+         \item[-] aggiunta di attributi 
+         \item[-] ridefinizione di attributi esistenti
+      \end{itemize}
+   \item[•] Normalmente l'ereditarietà tra tipo si usa solo per definire sottotipi (\textbf{ereditarietà stretta}); in questo caso:
+      \begin{itemize}
+         \item[-] gli attributi possono essere aggiunti 
+         \item[-] gli attributi possono essere ridefiniti solo specializzandone il tipo 
+      \end{itemize}
+\end{itemize}
+
+\underline{tipi definiti per ereditarietà:}
+\\
+\\
+\includegraphics[width=1\linewidth]{34}
+
+\subsection{Gerarchia tra classi}
+
+Fra classi può essere definita una relazione di \textbf{sottoclasse} (talvolta della sottoinsieme), con le seguenti proprietà:\\
+\\• riflessiva, antisimmetrica e transitiva (ordine parziale).\\
+\\• Se C è sotoinsieme di B, allora le entità in C sono un sottoinsieme delle entità in B (\textbf{vincolo estensionale}).\\
+\\• Se C è sottoclasse di B, allora il tipo delle entità in C è sottotipi del tipo degli elementi in B (\textbf{vincolo estensionale}).
+\\
+\\
+\underline{esempio:}
+\\
+\includegraphics[width=1\linewidth]{35}
+
+\subsection{Vincoli su sottoclassi}
+
+Ci sonodiversi tipi di vincoli:
+\\
+• \textbf{Vincolo di disgiunzione}:
+\\
+\includegraphics[width=1\linewidth]{36}
+\\
+• \textbf{Vincolo di copertura}
+\\
+\includegraphics[width=1\linewidth]{37}
+
+\newpage
+
+\underline{esempi:}
+\\
+\includegraphics[width=1\linewidth]{38}
+
+\subsection{Come funzionano le frecce}
+
+\begin{itemize}
+   \item[•] \textbf{Freccia singola}; una corrispondenza. 
+   \item[•] \textbf{Freccia multipla}; più corrispondenze.
+   \item[•] \textbf{Barretta prima delle freccie}; potrebbe non esserci corrispondenza.
+\end{itemize}
+Quando le frecce sono da entrambi i lati vuol dire che da entrambe le vie ci possono essere 
+più corrispondenze. Ad esempio un conto corrente può avere più intestatari, e una persona può avere più conti corrente.
+\\
+\\
+Per corrispondenza si intende che ci ha a che fare.
+
+\newpage
+
+\subsection{Modello concettuale}
+
+\begin{itemize}
+   \item[•] Gli utenti possono essere studenti o docenti. Di uno studente interessa anche la matricola e di un docente anche il telefono dell’ufficio.
+   \item[•] Alcuni libri sono per la sola consultazione e possono essere presi in prestito per un numero prefissato di giorni solo dagli utenti che sono docenti.
+\end{itemize}
+
+\begin{center}\includegraphics[width=1.2\linewidth]{39}\end{center}
+
+\newpage
+
+\subsubsection{Esempi di esercizi:}
+
+\begin{itemize}
+   \item[1)] Si vogliono rappresentare informazioni relative a una catena di negozi di abbigliamento. Un negozio ha un indirizzo, un numero di telefono e l’orario di apertura costituito dai giorni della settimana e dalle ore di apertura e chiusura. I vestiti sono identificati da un codice e hanno un modello e una taglia che è espressa con XS, S, M, L o XL se è un vestito per adulti, dall’altezza minima e massima se è per bambini. I modelli sono caratterizzati da un nome, una descrizione, un insieme di colori, un prezzo e dai negozi in cui questi modelli sono disponibili. Inoltre si vogliono memorizzare informazioni relative ai clienti: il nome, il cognome e il numero della carta fedeltà. I clienti possono fare diversi acquisti e si vuole conoscere i vestiti acquistati, il giorno, l’ora, la modalità di pagamento dell’acquisto e il negozio in cui si è effettuato l’acquisto. 
+\end{itemize}
+
+\includegraphics[width=0.9\linewidth]{43}
+
+\subsection{Descrittore di classe con vincoli}
+
+\includegraphics[width=\linewidth]{40}
+\\
+$<<$K$>>$\textbf{ chiave}: sottoinsieme minimale di attributi che identifica l'oggetto 
+\\
+$<<$NOT NULL$>>$ \textbf{totalità}
+\\
+\\
+$self.Nome$ = attributo $Nome$ dell'oggetto stesso
+\\
+\\
+In $Esami$ potremmo usare $self.HaSostenuto.Matricola$
+
+\subsection{Formalismi grafici}
+
+\includegraphics[width=\linewidth]{41}
+
+\section{Progettazione di Data Base}
+
+\subsection{Progettazione concettuale di schemi}
+
+\begin{itemize}
+   \item[•] Identificare le classi 
+   \item[•] Identificare le associazini con relative proprietà strutturali 
+   \item[•] Identificare gli attributi delle classi e associazioni e i loro tipi 
+   \item[•] Individuare le sottoclassi 
+   \item[•] Individuare le generalizzazioni 
+   \item[•] Vincoli di integrità
+\end{itemize}
+
+\subsection{Esercizio: Segreteria studenti}
+
+La segreteria si occupa di pratiche relative agli studentei del corso di laurea 
+in informatica, e in particolare delle richieste di trasferimento da altri corsi di laurea.
+\\
+\\
+Una \textbf{Domanda di trasferimento} viene trasmessa al CCS e determina l’istruzione di
+una pratica di trasferimento. La pratica viene infine evasa da una delibera che
+indica quali esami sono stati convalidati. Un esame di un corso esterno viene
+convalidato come esame interno, e la convalida di un esame può essere piena o
+previo colloquio integrativo.
+\\
+\\
+Di una domanda di trasferimento interessano il numero di protocollo (che la
+identifica), il nome e recapito dello studente che la presenta, Università, Facoltà,
+Corso di laurea di provenienza, data di presentazione, elenco dei corsi sostenuti.
+\\
+\\
+Di una pratica di trasferimento interessano la domanda di trasferimento a cui si
+riferisce, il numero progressivo che la identifica, annotazioni eventuali, l’eventuale
+delibera relativa.
+\\
+\\
+Di una delibera interessano la pratica relativa, gli esami convalidati, annotazioni
+eventuali, data e numero del verbale del CCS (assenti quando la delibera è in stato
+di bozza).
+\\
+\\
+Di un corso esterno interessano nome, Università, Facoltà, Corso di laurea (non
+necessariamente quelli di provenienza dello studente), Anno Accademico di
+superamento.
+\\
+\\
+Di un corso interno interessano nome e numero di crediti.
+\\
+\\
+Di una convalida d’esame interessa corso interno, corso esterno e se l’esame è
+convalidato in modo pieno o previo colloquio.
+Per alcuni corsi esterni esistono convalide tipiche, che indicano corso interno
+corrispondente e modalità di convalida.
+\\
+\\
+\underline{Disegnamo lo schema iniziale con sottocalssi e studanti:}
+\\
+\\
+\includegraphics[width=\linewidth]{44}
+
+\newpage
+
+\underline{Tipi degli attributi:}
+\\
+\\
+\includegraphics[width=\linewidth]{45}
+\\
+Ora che abbiamo un'idea generale di come debba essere fatto lo schema con vincoli 
+di integrità possiamo andare a farlo:
+
+\newpage
+
+\underline{Schema finale: vincoli di integrità}
+\\
+\\
+\\
+\includegraphics[width=1.4\textwidth, center]{46}
+
+\subsection{Integrazione di schemi}
+
+Per i grandi database accade che si costruiscano sottoschemi settoriali che vanno 
+poi integrati.
+\\
+\\
+• \textbf{Soluzione dei conflitti} (nome, tipo, proprietà strutturali, vincoli di integrità)\\
+• \textbf{Fusione degli schemi}\\
+• \textbf{Analisi delle proprietà interschema}
+\\
+\\
+\underline{esempio:}
+\\
+• In una biblioteca:
+\\
+\includegraphics[width=12cm]{47}
+\\
+• Risoluzione dei conflitti di nome, di tipo e di vincoli di i.
+\\
+dobbiamo uniformare gli schemi, nello schema B $Editore$ diventa una entità, $Nome$ diventa Titolo, $Descrittori$ diventa Argomenti
+\\
+\\
+\includegraphics[width=12cm]{48}
+\\
+\\
+• Fondere gli schemi:
+\\
+\\
+\includegraphics[width=12cm]{49}
+
+\newpage
+
+• Proprietà interschema 
+\\
+\\
+\includegraphics[width=12cm]{50}
+
+\section{Progettazione Logica: Il Modello Relazionale}
+
+• Il modello dei dati relazionale
+\\
+\\
+• Trasformazione dal modello concettuale ad oggetti al modello logico
+relazionale
+\\
+\\
+• Algebra relazionale
+
+\section{Il Modello Relazionale}
+
+\subsection{Intuizione}
+
+\begin{itemize}
+   \item[•] \textbf{Collezioni} come \textbf{relazioni (tabelle)}
+      \\
+      \includegraphics[width=12cm]{51}
+   \item[•] \textbf{Associazioni} tramite \textbf{chiavi}
+      \\
+      \includegraphics[width=12cm]{52}
+\end{itemize}
+
+
+
+\end{document}
