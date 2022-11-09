@@ -1,0 +1,711 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage{graphicx}
+
+\title{Probabilità e Statistica}
+\author{Alex Narder}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduzione}
+
+Per estrarre informazioni dai dati dobbiamo processarli adeguatamente;\\ 
+La statistica ci fornisce quegli stumenti per estrarre le informazioni dai dati, 
+uno statistico sa:
+\begin{itemize}
+\item[-] combinare informazioni di diverso tipo
+\item[-] valutare l'affidabilità
+\item[-] sintetizzare e presentare molti dati
+\item[-] costruire modelli
+\item[-] calcolare previsioni e formulare ipotesi di decisione
+\end{itemize}
+La statistica non è l'unico strumento usato per analizzare i dati, ma è quello più 
+adatto in presenza di incertezze.
+\\
+Anche l'informatica svolge un ruolo fondamentale nel salvataggio e nella gestione dei dati.
+
+\section{Termini della statistica}
+
+- La \textbf{popolazione di riferimento}, è un insieme di elementi chiamati \textbf{unità statistiche}.
+\\- I \textbf{dati} sono il risultato di rilevazioni o misurazioni.
+\\- La \textbf{statistica} ci permette di estrarre le informazioni dai dati, generando nuove conoscenze o ipotesi di decisione.
+\\- Ogni caratteristica rilevata sulle unità statistiche si chiama \textbf{variabile} e i dati
+corrispondenti a ogni variabile sono le \textbf{realizzazioni}.
+\\- Se le variabili non sono rilevate su tutte le statistiche, il sottoinsieme della popolazione oggetto della rilevazione
+è chiamato il \textbf{campione}.
+
+
+\section{Tipi di variabili}
+
+Una variabile è \textbf{qualitativa} o \textbf{categorica} quando i suoi possibili valori o modalità
+prendono la forma di aggettivi o di altre espressioni verbali.
+\\
+Le variabili qualitative possono essere:
+\begin{itemize}
+   \item[-] Sconnesse
+   \item[-] Ordinali
+
+\end{itemize}
+Le variabili categoriche possono essere:
+\begin{itemize}
+   \item[-] Discrete o intere
+   \item[-] Continue o reali
+\end{itemize}
+
+\section{Calcolo della Probabilità}
+
+Perché l’inferenza porti a risultati sensati, bisogna che sia noto il
+legame fra popolazione e campione.\\
+\\
+• Il calcolo delle probabilità fornisce i modelli matematici utili per
+descrivere la relazione fra campione e popolazione.\\
+• Il calcolo delle probabilità è lo strumento necessario per l’inferenza.
+Permette di quantificare gli errori che commettiamo nel passaggio
+dal particolare (campione) al generale (popolazione).
+
+\section{Esempi di probabilità}
+
+\begin{itemize}
+	\item[-] Lancio di 1 dado (normale), qual è la probabilità che esca 6? 1/6
+	\item[-] Stessa domanda ma il dado ha 20 facce. 1/20
+\end{itemize}
+Qual è la probabilità che il risultato sia 2 o 6, sempre in riferimento della prima domanda?
+La probabilità che esca è 2/6.
+\\
+\\- Pensiamo di avere delle antenne in linea, se due antenne di fila non funzionano
+allora il sistema non funziona. Se una antenna è rotta ma quella successiva no il sistema funziona lo stesso
+perchè il segnale passa alla successiva.
+\\
+Sapendo che n antenne sono difettose, qual è la probabilità che il sistema funzioni?
+\\$m <= n$
+\\
+\\Se n = 4 e m = 2:
+\\1 $\rightarrow$ se l'antenna funziona
+\\0 $\rightarrow$ se l'antenna non funziona
+\\
+\\
+n rappresenta il numero delle antenne, mentre m è il nunero delle antenne rotte,
+quindi nel momento in cui ho un gruppo di antenne 1100 sò che le prime 2 funzionano,
+mentre le ultime 2 non funzionano e sono consecutive, quindi il sistema non funziona.
+Nel secondo caso invece le antenne non funzionanti non sono consecitive, 0110 quindi è un 
+sistema che funziona. Vado a prendere solo i casi in cui so che solo 2 non funzionano, perciò
+1111, 0000 oppure 1110 ecc ecc non vado a considerarli. $\rightarrow$
+\\
+\\
+1100 non funziona\\
+0110 funziona\\
+1010 funziona\\
+0011 non funziona\\
+0101 funziona\\
+1001 non funziona\\
+\\ probabilità richiesta: 3/6 = 1/2
+\\
+\\totale: 6, quindi sono 3 funzionanti
+\newpage
+\section{Contare le probabilità}
+
+\subsection{Principio fondamentale del calcolo combinatorio:}
+Se una scelta può essere fatta in m1 modi diversi e un’altra scelta può
+essere fatta in m2 modi diversi, allora esistono in totale
+\begin{center}
+	m1 * m2 possibilità di scelta
+\end{center}
+esempio:
+\\10 cavalieri e 12 dame partecipano a un ballo.
+Ci sono 10 × 12 = 120 possibili coppie danzanti.
+\\
+\\
+\subsection{Principio fondamentale generalizzato:}
+
+Se ciascuna delle r scelte successive può essere fatta in \(m_i\) modi, allora esistono rispettivamente in totale:
+\[\prod_{i=1}^{r}m_i = m_1 * ... * m_r \]possibilità di scelta
+esempio:\\
+Una commissione parlamentare deve essere composta da un
+membro del partito A, che conta 10 rappresentanti, da un membro del
+partito B, che conta 15 rappresentanti, e da un membro del partito C,
+che conta 2 rappresentanti.
+Ci sono in totale 10 × 15 × 2 = 300 possibili commissioni
+parlamentari.
+
+\section{Disposizioni}
+
+Consideriamo un insieme di n elementi. Una \textbf{disposizione} di r di essi è
+una scelta ordinata di r elementi tra quegli n.\\
+\\
+• Si distinguono le disposizioni con \textbf{ripetizione} da quelle \textbf{semplici} (o
+\textbf{senza ripetizione}), a seconda che uno stesso elemento possa
+essere scelto più di una volta:
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\• Le disposizioni con \textbf{ripetizione} di n elementi presi r alla volta sono in
+numero di
+\begin{center}
+   $\prod_{i=1}^{r}n = n^r$
+\end{center}
+esempio:
+\\
+le parole lunghe due lettere che si possono comporre con le
+lettere I, L, A sono $3^2$ = 9: II, IL, IA, LI, LL, LA, AI, AL, AA.
+\\
+\\
+\\
+• Le \textbf{disposizioni semplici o senza ripetizione} di n elementi presi r alla
+volta sono in numero di
+\begin{center}
+   $n * (n - 1)$ ... $* (n - r + 1)$
+\end{center}
+esempio:\\
+le parole di due lettere diverse che si possono comporre con
+le lettere I, L, A sono 3 × 2 = 6: IL, IA, LI, LA, AI, AL.
+
+\section{Campionamento da un’urna}
+
+Il \textbf{campionamento casuale da un’urna} è un’estrazione di palle da
+un’urna. Può essere fatto \textbf{con o senza reintroduzione}.
+\begin{itemize}
+   \item[•] Per \textbf{casuale} si intende dire che prima di ogni estrazione l’urna viene
+mescolata appropriatamente per essere riportata a una condizione di
+irriconoscibilità delle palle. Un’operazione del genere viene fatta, ad
+esempio, per le estrazioni del lotto.
+   \item[•] La \textbf{reintroduzione} fa invece riferimento al fatto di rimettere nell’urna
+ciascuna palla subito dopo averla estratta e averne registrate le
+caratteristiche di interesse, per esempio il suo numero o il suo colore.
+\end{itemize}
+Quindi:
+\\- Se un'urna contiene n palle distinguibili e r palle vengono estratte con reintroduzione,
+ci sono \(n^r\) possibilità di estrazione.
+\\- Se un'urna contiene n palle distinguibili e r palle vengono estratte senza reintroduzione,
+le estrazioni possibili sono $n * (n - 1)$ ... $* (n - r + 1)$.
+
+\section{Permutazioni}
+
+Le disposizioni semplici di n elementi presi n alla volta si chiamano anche
+\textbf{permutazioni} perché rappresentano tutti i modi in cui n elementi possono
+essere ordinati in fila. Esse sono in numero di
+ \[n * (n - 1) ... * 2 * 1 =: n!\] 
+\\
+Il simbolo speciale n! che rappresenta questa quantità si legge n
+\textbf{fattoriale}.
+\\
+\\
+\textbf{Esempio 1:}\\
+Le permutazioni delle lettere I, L, A sono
+3 × 2 × 1 = 3! = 6:
+\\ILA, IAL, LIA, LAI, AIL, ALI.
+\\
+\\\textbf{Esempio 2:}
+\\Supponiamo di fare due file, i 6 maschietti a
+destra e le 4 femminucce a sinistra.
+Ci sono 6! possibili file di maschietti e 4! file di femminucce possibili.
+\\Quindi, dal principio fondamentale del calcolo combinatorio, in
+tutto ci sono 6! × 4! = 17280 possibili file.
+
+\section{Combinazioni}
+
+In generale; Un sottoinsieme di numerosità $r$ scelto da un insieme con $n$ elementi si chiama
+\textbf{combinazione} di $n$ elementi presi $r$ alla volta.
+\\
+Il numero di combinazioni di $n$ elementi $r$ alla volta è
+\[\frac{n * (n - 1) ... (n - r + 1)}{r!} =: {{n}\choose{r}}\]
+esempio:
+\\
+La professoressa di matematica interroga ogni lunedì 10
+studenti da una classe di 25. Esistono per lei ${{25}\choose{10}}$ = 3.268.760
+possibilità di scelta.
+\\
+\\
+$\rightarrow$ Il nome coefficente binomiale deriva dalla seguente espressione:
+\\
+\[(a+b)^n = \sum_{k=0}^n {{n}\choose{k}} a^{n-k}b^k\]
+\\
+detta formula del \textbf{Binomio di Newton}.
+\\
+\\
+Esempio: \\
+\[(a+b)^2 = {{2}\choose{0}} a^2 b^0 + {{2}\choose{1}}ab + {{2}\choose{2}}a^0 b^2 = a^2 + 2ab + b^2\]
+
+\section{Fenomeni Aleatori}
+\begin{itemize}
+   \item[•] La logica del \textbf{certo} è la logica della teoria degli insiemi e del calcolo
+      su proposizioni (o eventi) che possono assumere il valore di vero o
+      falso in modo \textbf{deterministico}. 
+   \item[•] Il \textbf{calcolo delle probabilità} è invece la logica dell’\textbf{incerto}. Si usa per
+      ragionare sui possibili risultati di un \textbf{fenomeno aleatorio} o \textbf{casuale},
+      del quale cioè non si può prevedere con certezza l’esito.
+   \item[•] Si può pensare al termine \textbf{aleatorio} come l’opposto di
+      \textbf{deterministico}.
+\end{itemize}
+
+\subsection{Esempi di fenomeni aleatori:}
+\begin{itemize}
+   \item[-] Il lancio di un dado
+   \item[-] Il lancio di una stessa moneta 4 volte
+   \item[-] La classificazione di 10 pezzi prodotti da una macchina in conformi o
+non conformi alle specifiche di progetto
+\item[-] L’estrazione di una mano di poker, cioè un insieme di cinque carte, da
+un mazzo di 52
+      \item[-] L’osservazione del tempo di guasto [min] di un circuito elettrico
+formato da tre resistenze in serie
+\end{itemize}
+\subsection{Esempi dell’incertezza in informatica:}
+\begin{itemize}
+   \item[-] Il tempo o lo spazio su un disco richiesti per l’installazione di un
+software
+\item[-] Il numero di difetti di un nuovo software
+\item[-] La memoria richiesta per processare un programma
+\item[-] Il tempo richiesto per una stampa o il numero di lavori in coda di
+stampa prima di questo
+\item[-] Il momento nel quale un virus attacca un sistema o il numero di file e
+directory infetti
+\end{itemize}
+
+\section{Spazio campionario, risultati ed eventi}
+
+\subsection{Spazio campionario}
+Lo \textbf{spazio campionario} è l'insieme di tutti i possibili risultati di un fenomeno aleatorio. Che viene rappresentato con 
+$\Omega$. Un generico \textbf{risultato} è un elemento dello spazio campionario, $\omega \in \Omega$.
+\\
+\\
+\textbf{Esempi di spazio campionario:}
+\\
+\begin{itemize}
+   \item[-] Lancio di un dado: $\Omega$ = {1, 2, 3, 4, 5, 6}
+   \item[-] Lancio di una stessa moneta quattro volte: $\Omega$ = le sedici possibili sequenze di quattro dei simboli T e C, dove T indica “testa” e C indica “croce”
+   \item[-] La classificazione di 10 pezzi con 2 possibili risultati C e N , dove C indica ’conforme’ e N indica ’non conforme’: $\Omega$ = le 210 possibili sequenze di dieci dei simboli C e N
+   \item[-] Una mano di poker: $\Omega$ = i (525) possibili sottoinsiemi delle 52 carte.
+   \item[-] Il tempo di guasto del circuito elettrico:\( \Omega = R+ := [0, \infty)\), cioè tutti i numeri non negativi, visto che il tempo di guasto è un numero non negativo
+   \item[-] I livelli massimi giornalieri di polveri nel Gennaio 2015: $\Omega$ = tutte le
+   possibili sequenze di 31 numeri non negativi (la maggior parte
+   contenuti tra 10 e 350)
+\end{itemize}
+
+\subsection{Eventi}
+Un \textbf{evento} è un sottoinsieme A $\subset$  $\Omega$. Una volta che il fenomeno aleatorio di interesse è stato osservato si
+può dire se un qualsiasi evento A sia vero o falso. Quando un evento è vero, si dice che si è \textbf{realizzato o verificato}. I possibili risultati {$\omega$}, visti come singoletti, cioè insiemi contenenti
+un solo elemento, sono anch’essi eventi, detti eventi \textbf{elementari}.
+$\Omega$ viene anche chiamato l’\textbf{evento certo}, perché sicuramente si verificherà.\\
+Eventi impossibili $\rightarrow$ ø
+\\
+\\
+\textbf{Esempi di eventi}
+\\
+\begin{itemize}
+   \item[-] Il dado dà un punteggio superiore a quattro: $A = {5, 6}$
+   \item[-] Otteniamo almeno tre teste sui quattro lanci:
+      \[A = {T T T C, T T CT, T CT T, CT T T, T T T T }\]
+   \item[-] Tutti i pezzi sono conformi:
+      \[A = {CCCCCCCCCC}\] (questo è anche un singoletto)
+   \item[-] Si ottiene un poker: l’evento A di interesse è dato da tutte le possibili
+      mani contenenti un poker, che sono in numero di \(13*48\) perché 13
+   sono i possibili poker e 48 sono, per ogni dato poker, i modi di
+   scegliere la quinta carta.
+   \item[-] Il circuito ha una durata di meno di 50 ore: \(A = [0, 50)\)
+\end{itemize}
+
+\section{operazioni sugli eventi e Diagrammi di Venn - partizioni}
+
+• La negazione o \textbf{complementare} di un evento A, viene indicato con $\hat{A}$, è l'evento che è vero quando A è falso
+ed è falso quando A è vero.
+\\
+La negazione dell'evento certo è l'\textbf{evento impossibile}: $\hat{\Omega}$ = ø (evento impossibile = insieme vuoto).
+\\
+\includegraphics[width=0.3\linewidth]{png/5}
+\\
+\\
+• L'\textbf{intersezione} di due eventi A e B, indicata con $A \cap B$, è l'evento che è vero quando sia A che B sono veri.
+\\
+\includegraphics[width=0.3\linewidth]{png/6}
+\\
+\\
+• L'\textbf{unione} di due eventi A e B, indicata con $A \cup B$, è l'evento che è vero quando o A o B o entrambi sono veri.
+\\
+\includegraphics[width=0.3\linewidth]{png/2}
+\\
+\\
+• L'evento A è \textbf{incluso} nell'evento B, in simboli $A \subset B$, se  il verificarsi di A implica il verificarsi di B.
+\\
+\includegraphics[width=0.3\linewidth]{png/3}
+\\
+\\
+• Due eventi A e B, si dicono \textbf{incompatibili o disgiunti}, se non è possibile che siano entrambi veri, cioè se $A \cap B = $ ø
+\\
+\includegraphics[width=0.3\linewidth]{png/4}
+\\
+\\
+• Una famiglia di eventi si dice una \textbf{partizione} dello spazio campionario
+se ogni coppia di insiemi della famiglia ha intersezione vuota e
+l’unione di tutti i componenti della famiglia è $\Omega$ stesso
+\\
+\\
+\includegraphics[width=\linewidth]{png/1}
+\\
+\includegraphics[width=\linewidth]{png/7}
+\\
+\subsection{esempio:}
+
+\textbf{fenomeno aleatorio:} lancio di un dado.
+\\
+\textbf{eventi}: Ne consideriamo i seguenti:\\\\
+$ A = \{5,6\} \rightarrow $ il risultatodel lancio è superiore a 4\\
+$ B = \{2,4,6\} \rightarrow $ il risultato del lancio è pari
+\\\\
+\textbf{allora}:
+\\\\
+$ A \cap B = \{6\} \rightarrow $ il risultato del lancio è pari e superiore a 4\\
+$ A \cup B = \{2,4,5,6\} \rightarrow $ il risultato del lancio è pari oppure superiore a 4\\
+\\
+\textbf{partizione:} numeri divisibili per 3 e non:
+\\
+\\
+$ C_1 = \{3,6\}$\\
+$ C_2 = \{1,2,4,5\} $
+\\
+\\
+\textbf{allora}:
+\\
+\\
+$ A = (A \cap C_1)\cup(A \cap C_2) = \{6\}\cup \{5\}$
+\\
+$ B = (B \cap C_1)\cup(B \cap C_2) = \{6\} \cup \{2,4\}$
+
+\newpage 
+
+\section{Definizione assiomatica di probabilità}
+
+Formalmente, la \textbf{probabilità} è una funzione che assegna ad ogni evento di
+uno spazio campionario un valore in R+, ossia un numero non negativo, e
+deve sodisfare i seguenti assiomi:
+\\\\
+• \textbf{Positività}: $0 <= P [A] <= 1$\\\\
+• \textbf{Normalizzazione}: $P [\Omega] = 1$\\\\
+• \textbf{Aditività}: Se $A_1, A_2, ...$ è una sequenza di eventi incompatibili, cioè se $A_i \cap A_j $= ø $\forall i$ $\not = j$, allora:
+\begin{center}
+\includegraphics[width=0.4\linewidth]{png/8}\\
+\end{center}
+
+\subsection{Interpretazione della probabilità}
+
+La probabilità dell’evento A, P[A], è un numero tra 0 e 1 che indica il grado di fiducia 
+del individuo nell’avverarsi dell’evento A. Più P [A] è vicina a 1, più ci aspettiamo che 
+l’evento si avveri (minore la nostra incertezza sul avverarsi del evento).
+\\
+\\
+$\rightarrow$ Una volta osservato il fenomeno aleatorio, sappiamo se A si è verificato o meno, e la sua probabilità non serve più (diventa 1 se ò'evento si 
+è verificato e 0 in caso contrario).\\
+\\
+$\rightarrow$ Si può pensare alla probabilità come a una massa unitaria (in virtù del assioma (ii)) da spargere sullo spazio campionario.Se un evento si può scomporre in più pezzi (eventi disgiunti) la sua massa sarà uguale alla somma delle singole masse sui pezzi (singoli eventi).
+
+\subsection{Alcune proprietà della probabilità}
+
+\begin{itemize}
+   \item[•] Probabilità del \textbf{complementare}: dato un evento A,
+      $$P[\hat{A}] = 1 - P[A]$$
+   \item[•] Probabilità dell'\textbf{evento impossibile}:
+      $$P[\emptyset] = P[\hat{\Omega}] = 1 - P[\Omega] = 0$$
+   \item[•] Probabilità dell'\textbf{unione}: dati due eventi A e B,
+      $$P[A \cup B] = P[A] + P[B] - P[A \cap B]$$
+   \item[•] Probabilità di una \textbf{partizione}: se $C_1, C_2,...$ sono partizione, allora 
+
+      \begin{center}\includegraphics[width=0.3\linewidth]{png/9}\end{center}
+\end{itemize}
+\includegraphics[width=\linewidth]{png/10}
+
+\section{Spazi campionari finiti}
+
+Se lo spazio campionario costituisce un insieme finito $\Omega = \{w_1, ... , w_n\}$ allora 
+un'assegnazione di prpbabilità è data da $n$ valori $p_1, ... , p_n$ tali che:
+\\
+\\
+• $p_i \in [0,1], \forall i = 1, ... , n$\\
+• $\sum_{i=1}^n p_i = 1$\\
+• $p_i = P[\{w_i\}], \forall i = 1, ... , n$
+\\
+\\
+Dato che ogni evento $A \subset \Omega$ si può scrivere come unione finita degli eventi elementari che lo costituiscono,
+\begin{center}
+\includegraphics[width=0.5\linewidth]{png/11}
+\end{center}
+si ha che:
+\begin{center}
+\includegraphics[width=0.5\linewidth]{png/12}
+\end{center}
+
+\section{Eventi elementari equiprobabili}
+
+In particolare, se possiamo supporre che tutti gli eventi abbiano la stessa probabilità, allora 
+\begin{center}\includegraphics[width=\linewidth]{png/13}\end{center}
+$\rightarrow$ questa formula vale solo per gli eventi elementari che sono equiprobabili.
+
+\subsection{esempi di eventi equiprobabili}
+
+\begin{itemize}
+   \item[•] Il \textbf{dado}: Qual è la probabilità che il risultato del lancio di un dado equilibrato sia un numero divisibile per 3?
+   \begin{itemize}
+      \item[-] Dato che il dado non è truccato, si può assumere che tutte le facce abbiano la stessa probabilità di uscita (1/6)
+      \item[-] I casi favorevoli al nostro evento sono 2, quando esce un 3 e quando esce un 6, mentre quelli possibili sono 6. Il risultato 
+               sarà dunque 2/6 = 1/3.
+   \end{itemize}
+   \item[•] L'\textbf{urna}:\\
+   \includegraphics[width=\linewidth]{png/14}
+\end{itemize}
+
+\section{Popolazioni e sottopopolazioni}
+
+Consideriamo un insieme, \textbf{la popolazione}, di N elementi suddivisi a seconda che possiedano o meno una certa caratteristica.
+Li dividiamo in 2 \textbf{sottopopolazioni}, rispettivamente di m e N-m elementi.
+\\
+\\Qual è la probabilità che su n elementi estratti casualmente esattamente k abbiano quella caratteristica?
+\\
+\\Ci sono 2 soluzioni:
+\begin{itemize}
+   \item[•] \textbf{Soluzione con reinserimento}:
+      \begin{itemize}
+         \item[-] Spazio campionario: $\Omega = \{(x_1, ... , x_n); x_i \in popolazione\; \forall i\}$
+            \\
+            \\Le estrazioni sono casuali quindi ogni n-upla (vettore ordinato di dimensione n) in $\Omega$ ha la stessa probabilità di essere estratta.
+         \item[-] Evento di interesse:
+            \\$A_k = \{(x_1, ... , x_n) \in \Omega;$ k\; elementi\;hanno\;la\;caratteristica\;richiesta$\}$
+            \\
+            \includegraphics[width=0.8\linewidth]{png/15}
+            \\
+      \end{itemize}
+   \item[•] \textbf{Soluzione senza reinserimento}: valida solo se $n <= N, k <= m$ e $n-k <= N-m$
+      \begin{itemize}
+         \item[-] Spazio campionario: $\Omega = \{\{x_1,...x_n\} ; x_i \in popolazione\; \forall i\}$
+            \\
+            \\Le estrazioni sono casuali quindi ogni sottoinsieme non ordinato di n elementi in $\Omega$ ha la stessa probabilità 
+              di essere estratto.
+            \item[-] Eventi di interesse: 
+            \\$A_k = \{\{x_1, ..., x_n\}\in \Omega ;\;k$ elementi hanno la stessa caratteristica richiesta $\}$\\
+            \\\includegraphics[width=0.7\linewidth]{png/16}
+            \\
+      \end{itemize}
+\end{itemize}
+
+\newpage
+
+\section{Probabilità condizionata e indipendenza}
+
+\subsection{Probabilità condizionata}
+
+Sia B un evento di probabilità positiva. La \textbf{probabilità condizionata} dell'evento A dato B è:
+\\
+$$P[A|B] = \frac{P[A\cap B]}{P[B]},\;\;\; P[B] > 0 $$
+
+\begin{itemize}
+   \item[•] $P [A|B]$ è anche chiamata la \textbf{probabilità subordinata} o condizionale
+            di A subordinatamente a B. Da notare l’uso della sbarra verticale "$| $" che collega l’evento condizionato A e l'evento condizionante B.
+   \item[•] $P[A|B]$ rappresenta la probabilità di A valutata con l'informazione aggiuntiva che B si verifichi.
+   \item[•] Intuitivamente, si restringe il campo delle possibilità non alla totalità
+            dei possibili risultati $\Omega$ ma ad un suo sottoinsieme proprio $B \subset \Omega$.
+            \\\\\includegraphics[width=\linewidth]{png/17}\\
+            \newpage
+            Occorre fare \textbf{attenzione}, in quanto $P[A|B]$ e $P[B|A]$ sono cose distinte:
+            \\\includegraphics[width=\linewidth]{png/18}\\
+   \item[•] $P[A|B]$ e $P[\hat{A}|B]$ sono in relazione diretta:
+            $$P[\hat{A}|B] = \frac{P[\hat{A}\cap B]}{P[B]} = \frac{P[B] - P[A\cap B]}{P[B]} = 1-P[A|B],$$
+            \\
+            Le probabilità \textbf{condizionate allo stesso evento} osservano le leggi (assiomi) della probabilità.
+   \item[•] $P[A|B]$ e $P[A|\hat{B}]$ non sono in relazione diretta: $P[A|B]$ potrebbe essere uguale a 
+            $1-P[A|\hat{B}]$ in qualche esempio, ma in generale non è così.\\
+            \\\includegraphics[width=\linewidth]{png/19}\\
+            \includegraphics[width=\linewidth]{png/20}\\
+\end{itemize}
+
+\subsection{Formula delle probabilità composte}
+
+\begin{itemize}
+   \item[•] La definizione di probabilità condizionata si può anche usare come formula 
+      pratica per la fattorizzazione della probabilità di un'intersezione, sempre che $P[A|B]$ sia ben definita:
+      \[P[A\cap B] = P[A|B]P[B]\]
+   \item[•] Questa formula si generalizza ad un qualsiasi numero di eventi $A_1, ... , A_n$ e viene anche chiamata la 
+      \textbf{formula delle probabilità composte}.
+      \\
+      \includegraphics[width=\linewidth]{png/21}
+\end{itemize}
+
+\includegraphics[width=\linewidth]{png/22}
+
+\subsection{Eventi indipendenti}
+
+\includegraphics[width=\linewidth]{png/23}
+\begin{itemize}
+   \item[•] Se A e B sono indipendenti, si ha allora 
+      \[P[A \cap B] = P[A]P[B]\]
+      che può anche essere presa come \textbf{definizione di eventi indipendenti}
+   \item[•] La definizione si può estendere a più di 2 eventi\\\\
+      \includegraphics[width=0.9\linewidth]{png/24}
+   \item[•] La definizione si può estendere ulteriormente a una collezione infinita
+di eventi $A1, . . . , An, . . .,$ che saranno indipendenti se ogni
+sottoinsieme finito di essi è formato da eventi indipendenti.
+\end{itemize}
+\includegraphics[width=\linewidth]{png/25}\\
+\includegraphics[width=\linewidth]{png/26}\\
+\includegraphics[width=\linewidth]{png/27}
+
+\subsection{Esempio: Sistemi in serie}
+
+Un sistema formato da n componenti separati si dice \textbf{in serie} se funziona 
+quando tutti gli n componenti funzionano.
+\\
+\\
+Si supponga che i componenti del sistema si guastino in modo \textbf{indipendente}
+e che la probabilità di guasto del componente i-esimo sia $p_i$.
+\\
+\\Sia inoltre $A_i$ l'evento in cui il componente i-esimo funziona e A l'evento 
+in cui l'intero sistema funziona (quindi $A = \cap_{i=1}^n A_i$)
+\\\\
+\includegraphics[width=0.8\linewidth]{png/28}
+
+\newpage
+
+\subsection{Esempio: Sistemi in parallelo}
+
+Un sistema formato da n componenti separati si dice \textbf{in parallelo} se 
+funziona quando almeno uno degli n componenti funziona. 
+\\\\
+\includegraphics[width=\linewidth]{png/29}
+\\
+Si supponga che i componenti del sistema si guastino in modo \textbf{indipendente} e che la probabilità di 
+guasto del componente i-esimo sia $p_i$.
+\\
+Sia inoltre $A_i$ l'evento in cui il componente i-esimo funziona e B l'evento in cui l'intero sistema funziona (quindi $B = \cap_{i=1}^n A_i$)
+\\\\
+\includegraphics[width=\linewidth]{png/30}
+
+\subsection{Esempio: Test diagnostici}
+
+\begin{itemize}
+   \item[•] La frazione di soggetti affetti da una stessa malattina in una popolazione si chiama 
+      \textbf{prevalenza}.
+   \item[•] Si consideri un test diagnostico per la malattia. La \textbf{sensitività} è la probabilità 
+      che il test risulti positivo una volta somministrato al malato.
+   \item[•] La \textbf{specificità} di un test è la probabilità che il test, sia negativo una volta somministrato al malato.
+      \\
+      \includegraphics[width=\linewidth]{png/31}
+   \item[•] Si immagini di somministrare un test diagnostico imperfetto a una 
+      persona estratta a caso dalla popolazione e si considerino i seguenti eventi:
+      \\
+      \begin{center}M = la persona estratta è malata\end{center}
+      \begin{center}+ = il test dà risultato positivo\end{center}
+      \begin{center}- = il test dà risultato negativo\end{center}
+      \begin{center}$\hat{M} \cap + =\; $il test dà un falso positivo\end{center}
+      \begin{center}$M \cap - =\; $il test dà un falso negativo\end{center}
+   \item[•] Si ha allora:
+      \begin{center}$P[M] =$ prevalenza, $P[+|M]$ = sensitività, $P[-|\hat{M}]$ = specificità\end{center}
+\end{itemize}
+
+\subsubsection{probabilità di un falso positivo}
+
+$P[\hat{M} \cap +] = P[\hat{M}]P[+|\hat{M}] =$ (1 - prevalenza) x (1 - specificità)
+
+\subsubsection{Probabilitò di un falso negativo}
+
+$P[M \cap -] = P[M]P[-|M] =$ prevalenza x (1 - sensitività)
+
+\subsubsection{Es: Si studi un test per l'HIV}
+
+prevalenza = $P[HIV] = 0.001$
+\\
+sensitività = $P[+|HIV] = .95$
+\\
+specificità = $P[-|\overline{HIV}] = .98$ (fingiamo che HIV abbia la linea nera sopra)\\
+\\
+• La probabilità di un falso positivo è 
+\begin{center}$P[\overline{HIV} \cap +] = P[\overline{HIV}]P[+|\overline{HIV}] = (1 - 0.001)(1 - 0.98) = 0.01998$\end{center}
+• La probabilità di un falso negativo è
+\begin{center}$P[HIV \cap -] = P[HIV]P[-|HIV] = 0.001(1-0.95) = 0.00005$\end{center}
+
+\subsection{Legge della probabilità totale}
+
+\includegraphics[width=\linewidth]{png/32}
+
+• La prima uguaglianza viene dal fatto che 
+\begin{center}$A = \cup_i(A\cap C_i)$\end{center}
+che sono eventi a due a due disgiunti \\
+\\
+• La seconda uguaglianza segue dalla definizione di probabilità condizionata, 
+sempre che $P[C_i] > 0, \forall i = 1,2,...$
+\\
+\includegraphics[width=\linewidth]{png/33}
+
+\subsection{La formula di Bayes}
+
+\includegraphics[width=\linewidth]{png/34}
+\\
+La formula si può derivare da:
+\begin{itemize}
+   \item[•] La definizione di probabilità condizionata:
+      \[P[C_m|A] = \frac{P[C_m\cap A]}{P[A]}\]
+   \item[•] La formula delle probabilità composte (per il numeratore):
+      \[P[C_m \cap A] = P[C_m]P[A|C_m]\]
+   \item[•] La legge della probabilità totale (per il denominatore):
+      \[P[A] = \sum_i P[A|C_i]P[C_i]\]
+\end{itemize}
+\includegraphics[width=\linewidth]{png/35}
+\\
+\\
+\textbf{Interpretazione del teorema di Bayes:}\\
+Permette di aggiornare l'assegnazione di probabilità data \textbf{a priori} a certi 
+eventi $C_m$, alla luce di nuova informazione (A si è verificato).
+\\
+Il risultato di questa operazione sono le nuove probabilità $P[C_m|A]$ dette anche 
+\textbf{a posteriori.}
+\\
+Le probabilità a posteriori costituiscono una sintesi dell'informazione disponibile a priori su un certo fenomeno e dell'informazione empirica.
+\\
+\\
+\includegraphics[width=\linewidth]{png/37}\\
+\includegraphics[width=\linewidth]{png/38}\\
+\includegraphics[width=\linewidth]{png/36}\\
+
+\newpage
+
+\section{Variabili Casuali}
+
+Abbiamo precedentemente visto esempi di \textbf{fenomeni aleatori e spazi campionari}.
+\\\\
+Uno spazio campionario relativo a un esperimento o ad un fenomeno casuale può essere di varia natura: \\
+$\rightarrow$ quindi non è detto che sia un insieme numerico
+\\
+\\
+In molte situazioni il nostro interesse dovrebbe cadere sulla \textbf{funzione numerica} dell'esperimento, invece nel suo risultato.
+\\
+\\
+\underline{esempio:}
+\\
+Si fa una scommessa in cui si vincono 1000 euro se lanciando una moneta si ottiene testa e se ne perdono 1500 se il risultato è croce.
+\\
+$\rightarrow$ chiaramente ciò che ci preme di più è l'importo della vincita e non il risultato esatto del lancio della moneta.
+\\\\
+\includegraphics[width=0.7\linewidth]{png/39}
+
+\subsection{Variabili aleatorie}
+
+\includegraphics[width=0.7\linewidth]{png/40}
+\\
+Le variabili aleatorie si indicano di solito con una lettera maiuscola,
+\\
+\underline{esempi:}
+\\
+• $S_4$ = numero di teste in 4 lanci consecutivi di una moneta; possibili valori di $S_4$ = 0, 1, 2, 3, 4.
+\\
+• $X$ = vincita nella scommessa decritta precedentemente. I possibili valori di $X$ sono 1000 e -1500.
+\\
+• $T$ = tempo di vita di un componente elettronico prodotto da una ditta. I possibili valori di $T$ sono tutti i numeri reali maggiori di 0.
+
+\subsection{Spazio campionario indotto}
+
+
+\end{document}
